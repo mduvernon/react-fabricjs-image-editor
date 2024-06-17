@@ -1,6 +1,6 @@
 # Discalaimer
 
-Updated for personal use this package (with React 18) it is an update (or refactoring) of the [`salgum1114/react-design-editor`](https://github.com/salgum1114/react-design-editor) library
+Updated for personal use (with React 18) this package it is an update (or refactoring) of the [`salgum1114/react-design-editor`](https://github.com/salgum1114/react-design-editor) library
 
 # React Fabricjs Image Editor
 
@@ -39,7 +39,7 @@ Try it out today - the project is being continually developed to support a varie
 
 # Getting Started
 
-1. Clone this Project with `git clone https://github.com/salgum1114/react-design-editor.git`
+1. Clone this Project with `git clone git@github.com:mduvernon/react-fabricjs-image-editor.git`
 2. Install dependencies with `npm install` or `yarn`
 3. Run the App with `npm start` or `yarn start`
 4. Open your web browser to `http://localhost:4000`
@@ -67,14 +67,6 @@ Try it out today - the project is being continually developed to support a varie
 ## Workflow Editor
 
 ![workflow](https://user-images.githubusercontent.com/19975642/55678053-718dd900-592e-11e9-9996-cce9b46d8433.PNG)
-
-## ❤️ Sponsors and Backers [![](https://opencollective.com/react-design-editor/tiers/badge.svg)](https://opencollective.com/react-design-editor/contribute) [![](https://opencollective.com/react-design-editor/tiers/sponsor/badge.svg?label=Sponsor&color=brightgreen)](https://opencollective.com/react-design-editor/contribute) [![](https://opencollective.com/react-design-editor/tiers/backer/badge.svg?label=Backer&color=brightgreen)](https://opencollective.com/react-design-editor/contribute)
-
-[![Sponsored by Workflows for Confluence](https://remote.automation-consultants.com/knowledge/download/attachments/57671882/sponsorship.png)](https://marketplace.atlassian.com/apps/1222276/workflows-for-confluence)
-
-[![](https://opencollective.com/react-design-editor/tiers/sponsor.svg?avatarHeight=36)](https://opencollective.com/react-design-editor/contribute)
-
-[![](https://opencollective.com/react-design-editor/tiers/backer.svg?avatarHeight=36)](https://opencollective.com/react-design-editor/contribute)
 
 # Dependencies
 
