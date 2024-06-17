@@ -1,7 +1,27 @@
 {
-  "name": "fabricjs-image-editor",
-  "version": "0.1.0",
+  "name": "react-fabricjs-image-editor",
+  "version": "0.0.1",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mduvernon/react-fabricjs-image-editor.git"
+  },
+  "keywords": [
+    "React.js",
+    "ant.design",
+    "antd",
+    "fabric",
+    "fabricjs",
+    "react-fabricjs-image-editor",
+    "design-tool",
+    "image-editor"
+  ],
+  "author": "mduvernon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mduvernon/react-fabricjs-image-editor/issues"
+  },
+  "homepage": "https://mduvernon.github.io/react-fabricjs-image-editor",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
