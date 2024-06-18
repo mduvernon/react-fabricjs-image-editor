@@ -1,29 +1,29 @@
-import { FC, LegacyRef, Ref, RefAttributes, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { FC, LegacyRef, Ref, RefAttributes, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 // Ant Design
 import { Form, Row, Col } from 'antd';
 // Lodash
 import debounce from 'lodash/debounce';
 // React Ace
 import ReactAce from 'react-ace';
-
+// Components
+import { AcePreview } from '../preview';
+// Styles
 import 'ace-builds/src-noconflict/mode-html';
 import 'ace-builds/src-noconflict/mode-css';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-github';
 
-import { AcePreview } from '../preview';
-
 type Handlers = {
-    onChangeHTML: (value: any) => void,
-    onChangeCSS: (value: any) => void,
-    onChangeJS: (value: any) => void,
-    onValidateHTML: (value: any) => void,
-    getAnnotations: () => {
+    onChangeHTML?: (value: any) => void,
+    onChangeCSS?: (value: any) => void,
+    onChangeJS?: (value: any) => void,
+    onValidateHTML?: (value: any) => void,
+    getAnnotations?: () => {
         htmlAnnotations: any[],
         cssAnnotations: any[],
         jsAnnotations: any[],
     },
-    getCodes: () => {
+    getCodes?: () => {
         html: string,
         css: string,
         js: string,
@@ -34,7 +34,7 @@ const defaultStyle = {
     padding: 12,
 };
 
-type OwnProps = RefAttributes<HTMLDivElement> & {
+type OwnProps = RefAttributes<HTMLDivElement> & Handlers & {
     isPreview?: boolean;
     isHTML?: boolean;
     isCSS?: boolean;
@@ -68,7 +68,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
     const cssRef = useRef<ReactAce>(null);
     const jsRef = useRef<ReactAce>(null);
 
-    const handlers = useRef({
+    const handlers = useMemo(() => ({
         onChangeHTML: debounce((value) => {
             setHTML(value);
             setHTMLAnnotations(htmlRef.current?.editor.getSession().getAnnotations() || []);
@@ -77,6 +77,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                 onChangeHTML(value);
             }
         }, 500),
+
         onChangeCSS: debounce((value) => {
             setCSS(value);
             setCSSAnnotations(cssRef.current?.editor.getSession().getAnnotations() || []);
@@ -85,6 +86,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                 onChangeCSS(value);
             }
         }, 500),
+
         onChangeJS: debounce((value) => {
             setJS(value);
             setJSAnnotations(jsRef.current?.editor.getSession().getAnnotations() || []);
@@ -93,6 +95,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                 onChangeJS(value);
             }
         }, 500),
+
         onValidateHTML: (annotations) => {
             const len = annotations.length;
 
@@ -110,17 +113,26 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                 htmlRef.current?.editor.getSession().setAnnotations(annotations);
             }
         },
+
         getAnnotations: () => ({
             htmlAnnotations,
             cssAnnotations,
             jsAnnotations,
         }),
+
         getCodes: () => ({
             html,
             css,
             js,
         }),
-    });
+    }), [
+        htmlAnnotations,
+        cssAnnotations,
+        jsAnnotations,
+        html,
+        css,
+        js,
+    ]);
 
     useEffect(() => {
         setHTML(props.html);
@@ -129,7 +141,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
     }, [props.css, props.html, props.js]);
 
     useImperativeHandle(editorRef$, () => ({
-        handlers: handlers.current,
+        handlers: handlers,
     }), []);
 
     return (
@@ -149,7 +161,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                                 editorProps={{
                                     $blockScrolling: true,
                                 }}
-                                onChange={handlers.current.onChangeHTML}
+                                onChange={handlers.onChangeHTML}
                             />
                         </Form.Item>
                     </Col>
@@ -170,7 +182,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                                 editorProps={{
                                     $blockScrolling: true,
                                 }}
-                                onChange={handlers.current.onChangeCSS}
+                                onChange={handlers.onChangeCSS}
                             />
                         </Form.Item>
                     </Col>
@@ -191,7 +203,7 @@ const AceEditor: FC<OwnProps> = forwardRef(({
                                 editorProps={{
                                     $blockScrolling: true,
                                 }}
-                                onChange={handlers.current.onChangeJS}
+                                onChange={handlers.onChangeJS}
                             />
                         </Form.Item>
                     </Col>

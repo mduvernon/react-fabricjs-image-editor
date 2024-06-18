@@ -6,6 +6,8 @@ import {
     Input,
     Form,
 } from 'antd';
+// Common Hooks
+import { useDeepCompareEffect } from "common/hooks";
 // Components
 import { Canvas } from "modules/canvas";
 import {
@@ -42,16 +44,12 @@ const DataSourceModal: FC<OwnProps> = forwardRef(({
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
 
-    const waitForContainerRender = (container) => {
-        setTimeout(() => {
-            if (container) {
-                setWidth(container.clientWidth)
-                setHeight(container.clientHeight)
-                return;
-            }
-            waitForContainerRender(containerRef);
-        }, 5);
-    };
+    useDeepCompareEffect(() => {
+        if (containerRef.current) {
+            setWidth(containerRef.current.clientWidth)
+            setHeight(containerRef.current.clientHeight)
+        }
+    }, [containerRef?.current]);
 
     return (
 

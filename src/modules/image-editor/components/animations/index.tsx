@@ -1,5 +1,5 @@
 // React
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 // Ant Design
 import { Form, Button } from 'antd';
 // i18next
@@ -42,14 +42,15 @@ const Animations: FC<OwnProps> = ({
     const [index, setIndex] = useState(-1);
 
     const modalRef = useRef(null);
-    const handlers = useRef({
+
+    const handlers = useMemo(() => ({
         onOk: () => {
             if (validateTitle.validateStatus === 'error') {
                 return;
             }
 
             if (!animation.title) {
-                setValidateTitle(handlers.current?.onValid());
+                setValidateTitle(handlers?.onValid());
                 return;
             }
 
@@ -114,7 +115,7 @@ const Animations: FC<OwnProps> = ({
             const isTitle = field === 'title';
 
             if (isTitle) {
-                setValidateTitle(handlers.current?.onValid(fields[field]));
+                setValidateTitle(handlers?.onValid(fields[field]));
             }
 
             setAnimation({
@@ -146,34 +147,39 @@ const Animations: FC<OwnProps> = ({
                 help: i18n.t('validation.already-property', { arg: i18n.t('common.title') }),
             };
         },
-    });
+    }), [
+        animations,
+        animation,
+        index,
+        current,
+    ])
 
     return (
         <Scrollbar>
             <Form>
                 <Flex flexDirection="column">
                     <Flex justifyContent="flex-end" style={{ padding: 8 }}>
-                        <Button className="rde-action-btn" shape="circle" onClick={handlers.current?.onAdd}>
+                        <Button className="rde-action-btn" shape="circle" onClick={handlers?.onAdd}>
                             <Icon name="plus" />
                         </Button>
-                        <Button className="rde-action-btn" shape="circle" onClick={handlers.current?.onClear}>
+                        <Button className="rde-action-btn" shape="circle" onClick={handlers?.onClear}>
                             <Icon name="times" />
                         </Button>
                         <AnimationsModal
                             ref={modalRef}
                             validateTitle={validateTitle}
                             visible={visible}
-                            onOk={handlers.current?.onOk}
+                            onOk={handlers?.onOk}
                             animation={animation}
-                            onCancel={handlers.current?.onCancel}
-                            onChange={handlers.current?.onChange}
-                            onValid={handlers.current?.onValid}
+                            onCancel={handlers?.onCancel}
+                            onChange={handlers?.onChange}
+                            onValid={handlers?.onValid}
                         />
                     </Flex>
                     <AnimationsList
                         animations={animations}
-                        onEdit={handlers.current?.onEdit}
-                        onDelete={handlers.current?.onDelete}
+                        onEdit={handlers?.onEdit}
+                        onDelete={handlers?.onDelete}
                     />
                 </Flex>
             </Form>

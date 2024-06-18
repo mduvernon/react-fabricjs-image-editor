@@ -1,6 +1,6 @@
 
 // React
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 // Ant Designs
 import { Badge, Button, Menu, Popconfirm } from 'antd';
 // Lodash
@@ -21,7 +21,7 @@ import { Canvas, FabricObjectOption } from "modules/canvas";
 // Common Classes
 import { SandBox } from "common/classes";
 // Constants
-import { MENU } from "../../constants/menu.constants";
+import { MENU } from "../../../../common/constants/menu.constants";
 // Styles
 import 'assets/fontawesome/css/all.css';
 import 'assets/style/style.scss';
@@ -105,19 +105,20 @@ const Editor: FC<OwnProps> = () => {
     const handlersRef = useRef(null);
     const canvasHandlersRef = useRef(null);
 
-    const canvasHandlers = useRef({
+    const canvasHandlers = useMemo(() => ({
         onAdd: (target) => {
             if (!editing) {
                 setEditing(true);
             }
 
             if (target.type === 'activeSelection') {
-                canvasHandlers.current?.onSelect(null);
+                canvasHandlers?.onSelect(null);
                 return;
             }
 
             canvasRef.current?.handler.select(target);
         },
+
         onSelect: (target) => {
             if (target && target.id && target.id !== 'workarea' && target.type !== 'activeSelection') {
 
@@ -144,14 +145,16 @@ const Editor: FC<OwnProps> = () => {
 
             setSelectedItem(null);
         },
+
         onRemove: () => {
 
             if (!editing) {
                 setEditing(true);
             }
 
-            canvasHandlers.current?.onSelect(null);
+            canvasHandlers?.onSelect(null);
         },
+
         onModified: debounce(() => {
 
             if (!editing) {
@@ -159,9 +162,11 @@ const Editor: FC<OwnProps> = () => {
             }
 
         }, 300),
+
         onZoom: zoom => {
             setZoomRatio(zoom);
         },
+
         onChange: (selectedItem, changedValues, allValues) => {
 
             if (!editing) {
@@ -172,7 +177,7 @@ const Editor: FC<OwnProps> = () => {
             const changedValue = changedValues[changedKey];
 
             if (allValues.workarea) {
-                canvasHandlers.current?.onChangeWokarea(changedKey, changedValue, allValues.workarea);
+                canvasHandlers?.onChangeWokarea(changedKey, changedValue, allValues.workarea);
 
                 return;
             }
@@ -392,6 +397,7 @@ const Editor: FC<OwnProps> = () => {
 
             canvasRef.current?.handler.set(changedKey, changedValue);
         },
+
         onChangeWokarea: (changedKey, changedValue, allValues) => {
             if (changedKey === 'layout') {
                 canvasRef.current?.handler.workareaHandler.setLayout(changedValue);
@@ -419,6 +425,7 @@ const Editor: FC<OwnProps> = () => {
             canvasRef.current?.handler.workarea.set(changedKey, changedValue);
             canvasRef.current?.canvas?.requestRenderAll();
         },
+
         onTooltip: (ref, target) => {
             const value = Math.random() * 10 + 1;
 
@@ -433,6 +440,7 @@ const Editor: FC<OwnProps> = () => {
                 </div>
             );
         },
+
         onClick: (canvas?: any, target?: any) => {
             const { link } = target;
 
@@ -444,6 +452,7 @@ const Editor: FC<OwnProps> = () => {
 
             window.open(link.url);
         },
+
         onContext: (ref, event, target) => {
             if ((target && target.id === 'workarea') || !target) {
                 const { layerX: left, layerY: top } = event;
@@ -544,14 +553,28 @@ const Editor: FC<OwnProps> = () => {
                 />
             );
         },
-        onTransaction: transaction => {
+
+        onTransaction: (transaction) => {
 
         },
-    });
+    }), [
+        canvasRef.current,
+        dataSources,
+        descriptors,
+        animations,
+        zoomRatio,
+        progress,
+        preview,
+        loading,
+        editing,
+        objects,
+        styles,
+    ]);
 
-    const handlers = useRef({
+    const handlers = useMemo(() => ({
         onChangePreview: (checked) => {
             let data;
+
             if (canvasRef.current) {
                 data = canvasRef.current?.handler.exportJSON().filter(obj => {
                     if (!obj.id) {
@@ -563,9 +586,11 @@ const Editor: FC<OwnProps> = () => {
             setPreview(typeof checked === 'object' ? false : checked);
             setObjects(data);
         },
+
         onProgress: (progress) => {
             setProgress(progress);
         },
+
         onImport: (files) => {
             if (files) {
                 setLoading(true);
@@ -575,7 +600,8 @@ const Editor: FC<OwnProps> = () => {
                     reader.onprogress = e => {
                         if (e.lengthComputable) {
                             const progress = parseInt(String((e.loaded / e.total) * 100), 10);
-                            handlers.current?.onProgress(progress);
+
+                            handlers?.onProgress(progress);
                         }
                     };
 
@@ -599,16 +625,20 @@ const Editor: FC<OwnProps> = () => {
                             canvasRef.current?.handler.importJSON(data);
                         }
                     };
+
                     reader.onloadend = () => {
                         setLoading(false);
                     };
+
                     reader.onerror = () => {
                         setLoading(false);
                     };
+
                     reader.readAsText(files[0]);
                 }, 500);
             }
         },
+
         onUpload: () => {
             const inputEl = document.createElement('input');
             inputEl.accept = '.json';
@@ -616,7 +646,7 @@ const Editor: FC<OwnProps> = () => {
             inputEl.hidden = true;
 
             inputEl.onchange = (e: any) => {
-                handlers.current?.onImport(e.target.files);
+                handlers?.onImport(e.target.files);
             };
 
             document.body.appendChild(inputEl); // required for firefox
@@ -624,6 +654,7 @@ const Editor: FC<OwnProps> = () => {
             inputEl.click();
             inputEl.remove();
         },
+
         onDownload: () => {
             setLoading(true);
 
@@ -650,37 +681,53 @@ const Editor: FC<OwnProps> = () => {
 
             anchorEl.download = `${canvasRef.current?.handler.workarea.name || 'sample'}.json`;
             document.body.appendChild(anchorEl); // required for firefox
+
             anchorEl.click();
             anchorEl.remove();
 
             setLoading(false);
         },
-        onChangeAnimations: animations => {
+
+        onChangeAnimations: (animations) => {
             if (!editing) {
                 setEditing(true);
             }
 
             setAnimations(animations);
         },
-        onChangeStyles: styles => {
+
+        onChangeStyles: (styles) => {
             if (!editing) {
                 setEditing(true);
             }
 
             setStyles(styles);
         },
-        onChangeDataSources: dataSources => {
+
+        onChangeDataSources: (dataSources) => {
             if (!editing) {
                 setEditing(true);
             }
 
             setDataSources(dataSources);
         },
+
         onSaveImage: () => {
             canvasRef.current?.handler.saveCanvasImage();
         },
-    });
-
+    }), [
+        canvasRef.current,
+        dataSources,
+        descriptors,
+        animations,
+        zoomRatio,
+        progress,
+        preview,
+        loading,
+        editing,
+        objects,
+        styles,
+    ]);
 
     useEffect(() => {
         setDescriptors(MENU);
@@ -713,7 +760,7 @@ const Editor: FC<OwnProps> = () => {
                                 icon="file-download"
                                 disabled={!editing}
                                 tooltipTitle={i18n.t('action.download')}
-                                onClick={handlers.current?.onDownload}
+                                onClick={handlers?.onDownload}
                                 tooltipPlacement="bottomRight"
                             />
                             {(editing) ? (
@@ -721,7 +768,7 @@ const Editor: FC<OwnProps> = () => {
                                     title={i18n.t('imagemap.imagemap-editing-confirm')}
                                     okText={i18n.t('action.ok')}
                                     cancelText={i18n.t('action.cancel')}
-                                    onConfirm={handlers.current?.onUpload}
+                                    onConfirm={handlers?.onUpload}
                                     placement="bottomRight"
                                 >
                                     <CommonButton
@@ -739,7 +786,7 @@ const Editor: FC<OwnProps> = () => {
                                     icon="file-upload"
                                     tooltipTitle={i18n.t('action.upload')}
                                     tooltipPlacement="bottomRight"
-                                    onClick={handlers.current?.onUpload}
+                                    onClick={handlers?.onUpload}
                                 />
                             )}
                             <CommonButton
@@ -747,7 +794,7 @@ const Editor: FC<OwnProps> = () => {
                                 shape="circle"
                                 icon="image"
                                 tooltipTitle={i18n.t('action.image-save')}
-                                onClick={handlers.current?.onSaveImage}
+                                onClick={handlers?.onSaveImage}
                                 tooltipPlacement="bottomRight"
                             />
                         </Fragment>
@@ -766,7 +813,7 @@ const Editor: FC<OwnProps> = () => {
                         <EditorHeaderToolbar
                             canvasRef={canvasRef}
                             selectedItem={selectedItem}
-                            onSelect={canvasHandlers?.current?.onSelect}
+                            onSelect={canvasHandlers?.onSelect}
                         />
                     </div>
                     <div
@@ -780,15 +827,15 @@ const Editor: FC<OwnProps> = () => {
                             maxZoom={500}
                             objectOption={defaultOption}
                             propertiesToInclude={propertiesToInclude}
-                            onModified={canvasHandlers.current?.onModified}
-                            onAdd={canvasHandlers.current?.onAdd}
-                            onRemove={canvasHandlers.current?.onRemove}
-                            onSelect={canvasHandlers.current?.onSelect}
-                            onZoom={canvasHandlers.current?.onZoom}
-                            onTooltip={canvasHandlers.current?.onTooltip}
-                            onClick={canvasHandlers.current?.onClick}
-                            onContext={canvasHandlers.current?.onContext}
-                            onTransaction={canvasHandlers.current?.onTransaction}
+                            onModified={canvasHandlers?.onModified}
+                            onAdd={canvasHandlers?.onAdd}
+                            onRemove={canvasHandlers?.onRemove}
+                            onSelect={canvasHandlers?.onSelect}
+                            onZoom={canvasHandlers?.onZoom}
+                            onTooltip={canvasHandlers?.onTooltip}
+                            onClick={canvasHandlers?.onClick}
+                            onContext={canvasHandlers?.onContext}
+                            onTransaction={canvasHandlers?.onTransaction}
                             keyEvent={{
                                 transaction: true,
                             }}
@@ -801,27 +848,27 @@ const Editor: FC<OwnProps> = () => {
                         <EditorFooterToolbar
                             canvasRef={canvasRef}
                             preview={preview}
-                            onChangePreview={handlers.current?.onChangePreview}
+                            onChangePreview={handlers?.onChangePreview}
                             zoomRatio={zoomRatio}
                         />
                     </div>
                 </div>
                 <EditorRightPanel
                     canvasRef={canvasRef}
-                    onChange={canvasHandlers.current?.onChange}
+                    onChange={canvasHandlers?.onChange}
                     selectedItem={selectedItem}
-                    onChangeAnimations={handlers.current?.onChangeAnimations}
-                    onChangeStyles={handlers.current?.onChangeStyles}
-                    onChangeDataSources={handlers.current?.onChangeDataSources}
+                    onChangeAnimations={handlers?.onChangeAnimations}
+                    onChangeStyles={handlers?.onChangeStyles}
+                    onChangeDataSources={handlers?.onChangeDataSources}
                     animations={animations}
                     styles={styles}
                     dataSources={dataSources}
                 />
                 <EditorImagePreview
                     preview={preview}
-                    onChangePreview={handlers.current?.onChangePreview}
-                    onTooltip={canvasHandlers.current?.onTooltip}
-                    onClick={canvasHandlers.current?.onClick}
+                    onChangePreview={handlers?.onChangePreview}
+                    onTooltip={canvasHandlers?.onTooltip}
+                    onClick={canvasHandlers?.onClick}
                     objects={objects}
                 />
             </div>

@@ -1,5 +1,5 @@
 // Reacts
-import { FC, Fragment, useRef, useState } from "react";
+import { FC, Fragment, useMemo, useRef, useState } from "react";
 // Ant Design
 import {
     notification,
@@ -35,7 +35,7 @@ const AceModal: FC<OwnProps> = ({
 
     const aceRef = useRef<any>(null);
 
-    const handler = useRef({
+    const handler = useMemo(() => ({
         onOk: () => {
             const code = aceRef.current.handlers.getCodes();
 
@@ -47,21 +47,22 @@ const AceModal: FC<OwnProps> = ({
             setVisible(false);
         },
         onCancel: () => {
-            modalHandlers.current?.onHide();
+            modalHandlers?.onHide();
         },
         onClick: () => {
-            modalHandlers.current?.onShow();
+            modalHandlers?.onShow();
         },
-    })
+    }), [onChange]);
 
-    const modalHandlers = useRef({
+    const modalHandlers = useMemo(() => ({
         onShow: () => {
             setVisible(true);
         },
+
         onHide: () => {
             setVisible(false);
         },
-    });
+    }), []);
 
     useDeepCompareEffect(() => {
         setCode(value || { html: '', css: '', js: '' });
@@ -76,7 +77,7 @@ const AceModal: FC<OwnProps> = ({
                 label={
                     <Fragment>
                         <span style={{ marginRight: 8 }}>Code Editor</span>
-                        <Button onClick={handler.current.onClick} shape="circle">
+                        <Button onClick={handler.onClick} shape="circle">
                             <Icon name="code" />
                         </Button>
                     </Fragment>
@@ -114,7 +115,7 @@ const AceModal: FC<OwnProps> = ({
                 <pre style={{ wordBreak: 'break-all', lineHeight: '1.2em' }}>{js}</pre>
             </Form.Item>
 
-            <Modal onCancel={handler.current.onCancel} onOk={handler.current.onOk} open={visible} width="80%">
+            <Modal onCancel={handler.onCancel} onOk={handler.onOk} open={visible} width="80%">
                 <AceEditor
                     ref={aceRef}
                     html={html}

@@ -10,8 +10,8 @@ import {
 } from 'common/components';
 // Components
 import {
-    LayersList
-} from "./layers-list";
+    EditorLayersList
+} from "../layers-list";
 
 type OwnProps = {
     canvasRef: any;
@@ -37,7 +37,7 @@ const EditorHeaderToolbar: FC<OwnProps> = ({
                     tooltipTitle={i18n.t('action.canvas-list')}
                 />
                 <div className="rde-canvas-list">
-                    <LayersList canvasRef={canvasRef} selectedItem={selectedItem} />
+                    <EditorLayersList canvasRef={canvasRef} selectedItem={selectedItem} />
                 </div>
             </Flex.Item>
             <Flex.Item className="rde-canvas-toolbar rde-canvas-toolbar-alignment">

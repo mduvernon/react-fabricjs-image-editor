@@ -1,5 +1,5 @@
 // React
-import { FC, RefAttributes, forwardRef, memo, useEffect, useMemo, useRef, useState } from "react";
+import { FC, RefAttributes, forwardRef, memo, useEffect, useMemo, useState } from "react";
 // Ant Design
 import {
     notification,
@@ -125,7 +125,10 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
         onSVGModalVisible: () => {
             setSvgModalVisible((prevState) => (!prevState));
         },
-    }), [canvasRef.current, descriptors]);
+    }), [
+        canvasRef.current,
+        descriptors
+    ]);
 
     const events = useMemo(() => ({
         onDragStart: (event, item) => {

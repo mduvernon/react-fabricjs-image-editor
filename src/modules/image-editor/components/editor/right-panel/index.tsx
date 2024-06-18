@@ -45,9 +45,11 @@ const EditorRightPanel: FC<OwnProps> = ({
         onChangeTab: (activeKey) => {
             setActiveKey(activeKey);
         },
+
         onCollapse: () => {
             setCollapse((prevCollapse) => !prevCollapse);
         },
+
     }), []);
 
     return (

@@ -1,5 +1,5 @@
 // React
-import { FC, RefAttributes, forwardRef, useEffect, useRef, useState } from "react";
+import { FC, RefAttributes, forwardRef, useRef, useState } from "react";
 // Ant Designs
 import {
     Input,
@@ -8,10 +8,12 @@ import {
 } from 'antd';
 // i18next
 import i18n from 'i18next';
+// Common Hooks
+import { useDeepCompareEffect } from "common/hooks";
 // Components
 import { StyleProperty } from "../../properties";
+// Modules
 import { Canvas } from "modules/canvas";
-import { useDeepCompareEffect } from "common/hooks";
 
 type OwnProps = RefAttributes<any> & {
     form?: any;
@@ -40,10 +42,6 @@ const StyleModal: FC<OwnProps> = forwardRef(({
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
 
-    useEffect(() => {
-        waitForContainerRender(containerRef.current);
-    }, []);
-
     useDeepCompareEffect(() => {
 
         if (canvasRef.current) {
@@ -55,38 +53,35 @@ const StyleModal: FC<OwnProps> = forwardRef(({
 
     }, [canvasRef.current]);
 
-    const waitForContainerRender = (container) => {
-        setTimeout(() => {
-            if (container) {
-                setWidth(container.clientWidth);
-                setHeight(container.clientHeight);
+    useDeepCompareEffect(() => {
+        if (containerRef.current) {
+            setWidth(containerRef.current.clientWidth);
+            setHeight(containerRef.current.clientHeight);
 
-                const option = {
-                    type: 'i-text',
-                    text: '\uf3c5',
-                    fontFamily: 'Font Awesome 5 Free',
-                    fontWeight: 900,
-                    fontSize: 60,
-                    width: 30,
-                    height: 30,
-                    editable: false,
-                    name: 'New marker',
-                    tooltip: {
-                        enabled: false,
-                    },
-                    left: 200,
-                    top: 50,
-                    id: 'styles',
-                };
+            const option = {
+                type: 'i-text',
+                text: '\uf3c5',
+                fontFamily: 'Font Awesome 5 Free',
+                fontWeight: 900,
+                fontSize: 60,
+                width: 30,
+                height: 30,
+                editable: false,
+                name: 'New marker',
+                tooltip: {
+                    enabled: false,
+                },
+                left: 200,
+                top: 50,
+                id: 'styles',
+            };
 
-                canvasRef.current.handler.add(option);
+            canvasRef.current?.handler?.add(option);
 
-                return;
-            }
+            return;
+        }
 
-            waitForContainerRender(containerRef.current);
-        }, 5);
-    };
+    }, [containerRef.current]);
 
     return (
         <Modal onOk={onOk} onCancel={onCancel} open={visible}>

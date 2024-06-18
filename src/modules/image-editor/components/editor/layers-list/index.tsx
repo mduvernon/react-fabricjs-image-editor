@@ -9,14 +9,17 @@ import {
     Flex,
     Icon
 } from "common/components";
-import { OBJECT_TYPES_ICONS } from 'common/constants/miscellaneous.constants';
+// Constants
+import {
+    OBJECT_TYPES_ICONS
+} from 'common/constants';
 
 type OwnProps = {
     canvasRef: any;
     selectedItem: any;
 }
 
-const LayersListComponent: FC<OwnProps> = ({
+const EditorLayersListComponent: FC<OwnProps> = ({
     canvasRef,
     selectedItem
 }) => {
@@ -50,7 +53,10 @@ const LayersListComponent: FC<OwnProps> = ({
             }
         },
 
-    }), [canvasObjects, canvasRef.current]);
+    }), [
+        canvasRef.current,
+        canvasObjects,
+    ]);
 
     useEffect(() => {
         _initCanvasObjects();
@@ -173,7 +179,7 @@ const LayersListComponent: FC<OwnProps> = ({
     }, [canvasObjects])
 
     return (
-        <Flex style={{ height: '100%' }} flexDirection="column">
+        <Flex className='rde-editor-layers-list' style={{ height: '100%' }} flexDirection="column">
             {_renderActions()}
             <div className="rde-canvas-list-items">
                 {_renderItem()}
@@ -182,8 +188,8 @@ const LayersListComponent: FC<OwnProps> = ({
     );
 };
 
-const LayersList = memo(LayersListComponent);
+const EditorLayersList = memo(EditorLayersListComponent);
 
-export { LayersList };
+export { EditorLayersList };
 
-export default LayersList;
+export default EditorLayersList;

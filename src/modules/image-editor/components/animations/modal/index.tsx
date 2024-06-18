@@ -8,10 +8,11 @@ import {
 } from 'antd';
 // i18next
 import i18n from 'i18next';
+// Common Hooks
+import { useDeepCompareEffect } from "common/hooks";
 // Components
 import { AnimationProperty } from "../../properties";
 import { Canvas } from 'modules/canvas';
-import { useDeepCompareEffect } from "common/hooks";
 
 type OwnProps = RefAttributes<any> & {
     form?: any;
