@@ -80,8 +80,8 @@ const Chart = fabric.util.createClass(fabric.Rect, {
 		if (!this.instance) {
 			const { id, scaleX, scaleY, width, height, angle, editable, chartOption } = this;
 			const zoom = this.canvas.getZoom();
-			const left = this.calcCoords().tl.x;
-			const top = this.calcCoords().tl.y;
+			const left = this.aCoords.tl.x;
+			const top = this.aCoords.tl.y;
 			const padLeft = (width * scaleX * zoom - width) / 2;
 			const padTop = (height * scaleY * zoom - height) / 2;
 			this.element = fabric.util.makeElement('div', {

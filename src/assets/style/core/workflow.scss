@@ -4,31 +4,36 @@
     display: -ms-flexbox;
     display: flex;
     flex: 1;
+
     &-items {
         position: relative;
-        width: 240px;
+        width: 400px;
         -webkit-box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.5);
         -moz-box-shadow: 5px 0 5px -5px rgba(56, 41, 41, 0.5);
         box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.5);
         z-index: 900;
-        transition: width .5s ease;
+        transition: width 0.5s ease;
+
         &:hover {
             .rde-track-vertical {
                 opacity: 1;
                 z-index: 9999;
             }
         }
+
         &.minimize {
             width: 47px;
         }
+
         .ant-collapse-content-box {
             padding: 0;
         }
+
         &-item {
             display: flex;
             height: 40px;
             align-items: center;
-            transition: .5s ease;
+            transition: 0.5s ease;
             border: 0 solid transparent;
             position: relative;
             background: #fff;
@@ -46,8 +51,8 @@
                 font-weight: 500;
             }
             &:hover {
-                background: rgba(0, 0, 0, .2);
-                box-shadow: 0 0 11px rgba(33, 33, 33, .2); 
+                background: rgba(0, 0, 0, 0.2);
+                box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
             }
             &:not(:last-child):after {
                 background-color: #e8e8e8;
@@ -118,9 +123,9 @@
         right: 0;
         height: 100%;
         background: rgba(255, 255, 255, 0.85);
-        -webkit-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, .5);
-        -moz-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, .5);
-        box-shadow: -5px 0 5px -5px rgba(0, 0, 0, .5);
+        -webkit-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.5);
+        box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.5);
         &:hover {
             .rde-track-vertical {
                 opacity: 1;
@@ -133,11 +138,11 @@
         overflow-y: auto;
         width: 400px;
         right: 0;
-        -webkit-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, .5);
-        -moz-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, .5);
-        box-shadow: -5px 0 5px -5px rgba(0, 0, 0, .5);
+        -webkit-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.5);
+        box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.5);
         background: #fff;
-        transition: width .5s ease;
+        transition: width 0.5s ease;
         &.minimize {
             width: 60px;
         }
@@ -170,12 +175,12 @@
                     background: transparent;
                     tr {
                         &.selected-item {
-                            background: rgba(0, 0, 0, .25);
+                            background: rgba(0, 0, 0, 0.25);
                         }
                         &:hover {
                             td {
                                 cursor: pointer;
-                                background: rgba(0, 0, 0, .25);
+                                background: rgba(0, 0, 0, 0.25);
                             }
                         }
                     }
@@ -199,11 +204,11 @@
             &-content {
                 position: relative;
                 max-height: 0;
-                -moz-transition: max-height .5s;
-                -ms-transition: max-height .5s;
-                -o-transition: max-height .5s;
-                -webkit-transition: max-height .5s;
-                transition: max-height .5s;
+                -moz-transition: max-height 0.5s;
+                -ms-transition: max-height 0.5s;
+                -o-transition: max-height 0.5s;
+                -webkit-transition: max-height 0.5s;
+                transition: max-height 0.5s;
                 overflow: hidden;
                 &.selected-item {
                     max-height: 1000px;
@@ -220,13 +225,13 @@
                 }
             }
             &.selected-item {
-                background: rgba(0, 0, 0, .25);
-                box-shadow: 0 0 11px rgba(33, 33, 33, .2);     
+                background: rgba(0, 0, 0, 0.25);
+                box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
             }
             &:hover {
                 cursor: pointer;
-                background: rgba(0, 0, 0, .15);
-                box-shadow: 0 0 11px rgba(33, 33, 33, .2); 
+                background: rgba(0, 0, 0, 0.15);
+                box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
             }
         }
     }

@@ -1,16 +1,19 @@
 // React
-import { FC, RefAttributes, forwardRef, useEffect, useRef, useState } from "react";
+import { FC, RefAttributes, forwardRef, memo, useEffect, useMemo, useRef, useState } from "react";
 // Ant Design
 import {
     notification,
-    Collapse,
     message,
     Input,
+    Tabs,
 } from 'antd';
 // i18next
 import i18n from 'i18next';
 // Libs
 import { v4 as uuid } from 'uuid';
+// Common Hooks
+import { useDeepCompareEffect } from "common/hooks";
+// Common Components
 import {
     CommonButton,
     Scrollbar,
@@ -18,7 +21,8 @@ import {
     Flex,
     Icon,
 } from 'common/components';
-import { useDeepCompareEffect } from "common/hooks";
+// Styles
+import './style.scss';
 
 notification.config({
     top: 80,
@@ -30,13 +34,13 @@ type OwnProps = RefAttributes<any> & {
     descriptors: any;
 }
 
-const ImageMapItems: FC<OwnProps> = forwardRef(({
+const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
     canvasRef,
     descriptors,
     ...props
-}, imageMapItemsRef$) => {
+}, editorLeftPanelRef$) => {
 
-    const [activeKey, setActiveKey] = useState([]);
+    const [activeKey, setActiveKey] = useState('');
     const [collapse, setCollapse] = useState(false);
     const [textSearch, setTextSearch] = useState('');
     const [filteredDescriptors, setFilteredDescriptors] = useState([]);
@@ -44,10 +48,11 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
     const [svgOption, setSvgOption] = useState(null);
     const [item, setItem] = useState(null);
 
-    const handlers = useRef({
+    const handlers = useMemo(() => ({
         onAddItem: (item, centered) => {
             if (canvasRef.current?.handler.interactionMode === 'polygon') {
                 message.info('Already drawing');
+
                 return;
             }
 
@@ -55,12 +60,14 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
             const option = Object.assign({}, item.option, { id });
 
             if (item.option.superType === 'svg' && item.type === 'default') {
-                handlers.current?.onSVGModalVisible();
+                handlers?.onSVGModalVisible();
+
                 return;
             }
 
             canvasRef.current?.handler.add(option, centered);
         },
+
         onAddSVG: (option?: any, centered?: any) => {
             canvasRef.current?.handler.add({
                 ...option,
@@ -70,8 +77,9 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
                 name: 'New SVG'
             }, centered);
 
-            handlers.current?.onSVGModalVisible();
+            handlers?.onSVGModalVisible();
         },
+
         onDrawingItem: (item) => {
 
             if (canvasRef.current?.handler.interactionMode === 'polygon') {
@@ -89,17 +97,20 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
                 canvasRef.current?.handler.drawingHandler.polygon.init();
             }
         },
-        onChangeActiveKey: (activeKey) => {
+
+        onChangeTab: (activeKey) => {
             setActiveKey(activeKey);
         },
+
         onCollapse: () => {
             setCollapse((prevState) => (!prevState));
         },
-        onSearchNode: (e) => {
-            const filteredDescriptors = handlers.current?.transformList()
-                .filter((descriptor) => descriptor.name.toLowerCase().includes(e.target.value.toLowerCase()));
 
-            setTextSearch(e.target.value);
+        onSearchNode: (event) => {
+            const filteredDescriptors = handlers?.transformList()
+                .filter((descriptor) => descriptor.name.toLowerCase().includes(event.target.value.toLowerCase()));
+
+            setTextSearch(event.target.value);
             setFilteredDescriptors(filteredDescriptors);
         },
 
@@ -114,48 +125,53 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
         onSVGModalVisible: () => {
             setSvgModalVisible((prevState) => (!prevState));
         },
-    });
+    }), [canvasRef.current, descriptors]);
 
-    const events = useRef({
-        onDragStart: (e, item) => {
+    const events = useMemo(() => ({
+        onDragStart: (event, item) => {
             setItem(item);
 
-            const { target } = e;
+            const { target } = event;
 
             target.classList.add('dragging');
         },
-        onDragOver: (e) => {
-            if (e.preventDefault) {
-                e.preventDefault();
+
+        onDragOver: (event) => {
+            if (event.preventDefault) {
+                event.preventDefault();
             }
 
-            e.dataTransfer.dropEffect = 'copy';
+            event.dataTransfer.dropEffect = 'copy';
 
             return false;
         },
-        onDragEnter: (e) => {
-            const { target } = e;
+
+        onDragEnter: (event) => {
+            const { target } = event;
+
             target.classList.add('over');
         },
-        onDragLeave: (e) => {
-            const { target } = e;
+
+        onDragLeave: (event) => {
+            const { target } = event;
 
             target.classList.remove('over');
         },
-        onDrop: (e) => {
-            e = e || window.event;
 
-            if (e.preventDefault) {
-                e.preventDefault();
+        onDrop: (event) => {
+            event = event || window.event;
+
+            if (event.preventDefault) {
+                event.preventDefault();
             }
 
-            if (e.stopPropagation) {
-                e.stopPropagation();
+            if (event.stopPropagation) {
+                event.stopPropagation();
             }
 
-            const { layerX, layerY } = e;
+            const { layerX, layerY } = event;
 
-            const dt = e.dataTransfer;
+            const dt = event.dataTransfer;
 
             if (dt.types.length && dt.types[0] === 'Files') {
                 const { files } = dt;
@@ -174,7 +190,7 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
                                 top: layerY,
                             },
                         };
-                        handlers.current?.onAddItem(item, false);
+                        handlers?.onAddItem(item, false);
                     } else {
                         notification.warning({
                             message: 'Not supported file type',
@@ -184,42 +200,47 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
                 return false;
             }
 
+            if (!item) {
+                return false;
+            }
+
             const option = Object.assign({}, item.option, { left: layerX, top: layerY });
             const newItem = Object.assign({}, item, { option });
 
-            handlers.current?.onAddItem(newItem, false);
+            handlers?.onAddItem(newItem, false);
 
             return false;
         },
-        onDragEnd: (e, item: any) => {
+
+        onDragEnd: (event, item: any) => {
             setItem(null);
-            e.target.classList.remove('dragging');
+            event.target.classList.remove('dragging');
         },
-    });
+    }), [item]);
 
-    const attachEventListener = (canvas) => {
-        canvas.canvas?.wrapperEl?.addEventListener('dragenter', events.current?.onDragEnter, false);
-        canvas.canvas?.wrapperEl?.addEventListener('dragover', events.current?.onDragOver, false);
-        canvas.canvas?.wrapperEl?.addEventListener('dragleave', events.current?.onDragLeave, false);
-        canvas.canvas?.wrapperEl?.addEventListener('drop', events.current?.onDrop, false);
+    const _attachEventListener = (canvas) => {
+        canvas.canvas?.wrapperEl?.addEventListener('dragenter', events?.onDragEnter, false);
+        canvas.canvas?.wrapperEl?.addEventListener('dragover', events?.onDragOver, false);
+        canvas.canvas?.wrapperEl?.addEventListener('dragleave', events?.onDragLeave, false);
+        canvas.canvas?.wrapperEl?.addEventListener('drop', events?.onDrop, false);
     };
 
-    const detachEventListener = (canvas) => {
-        canvas.canvas?.wrapperEl?.removeEventListener('dragenter', events.current?.onDragEnter);
-        canvas.canvas?.wrapperEl?.removeEventListener('dragover', events.current?.onDragOver);
-        canvas.canvas?.wrapperEl?.removeEventListener('dragleave', events.current?.onDragLeave);
-        canvas.canvas?.wrapperEl?.removeEventListener('drop', events.current?.onDrop);
+    const _detachEventListener = (canvas) => {
+        canvas.canvas?.wrapperEl?.removeEventListener('dragenter', events?.onDragEnter);
+        canvas.canvas?.wrapperEl?.removeEventListener('dragover', events?.onDragOver);
+        canvas.canvas?.wrapperEl?.removeEventListener('dragleave', events?.onDragLeave);
+        canvas.canvas?.wrapperEl?.removeEventListener('drop', events?.onDrop);
     };
 
-    const renderItems = (items: any[]) => (
+    const _renderItems = (items: any[]) => (
         <Flex flexWrap="wrap" flexDirection="column" style={{ width: '100%' }}>
-            {items.map((item) => renderItem(item))}
+            {items.map((item) => _renderItem(item))}
         </Flex>
     );
 
-    const renderItem = (item, centered?: boolean) => {
+    const _renderItem = (item, centered?: boolean) => {
         if (Array.isArray(item)) {
-            return item.map((i) => renderItem(i, centered));
+            return item.map((i) => _renderItem(i, centered));
         }
 
         return (
@@ -227,55 +248,60 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
                 <div
                     key={item.name}
                     draggable
-                    onClick={e => handlers.current?.onDrawingItem(item)}
+                    onClick={event => handlers?.onDrawingItem(item)}
                     className="rde-editor-items-item"
                     style={{ justifyContent: collapse ? 'center' : null }}
                 >
                     <span className="rde-editor-items-item-icon">
                         <Icon name={item.icon.name} prefix={item.icon.prefix} style={item.icon.style} />
                     </span>
-                    {collapse ? null : <div className="rde-editor-items-item-text">{item.name}</div>}
+
+                    {(collapse) ? (null) : (
+                        <div className="rde-editor-items-item-text">
+                            {item.name}
+                        </div>
+                    )}
                 </div>
             ) : (
                 <div
                     key={item.name}
                     draggable
-                    onClick={e => handlers.current?.onAddItem(item, centered)}
-                    onDragStart={e => events.current?.onDragStart(e, item)}
-                    onDragEnd={e => events.current?.onDragEnd(e, item)}
+                    onClick={event => handlers?.onAddItem(item, centered)}
+                    onDragStart={event => events?.onDragStart(event, item)}
+                    onDragEnd={event => events?.onDragEnd(event, item)}
                     className="rde-editor-items-item"
                     style={{ justifyContent: collapse ? 'center' : null }}
                 >
                     <span className="rde-editor-items-item-icon">
                         <Icon name={item.icon.name} prefix={item.icon.prefix} style={item.icon.style} />
                     </span>
-                    {collapse ? null : <div className="rde-editor-items-item-text">
-                        {item.name}
-                    </div>}
+
+                    {(collapse) ? (null) : (
+                        <div className="rde-editor-items-item-text">
+                            {item.name}
+                        </div>
+                    )}
                 </div>
             )
         )
     }
 
-
-
     useEffect(() => {
 
         return () => {
-            detachEventListener(canvasRef.current);
+            _detachEventListener(canvasRef.current);
         }
     }, []);
 
     useDeepCompareEffect(() => {
-
         if (canvasRef.current) {
-            attachEventListener(canvasRef.current);
+            _attachEventListener(canvasRef.current);
         }
 
-    }, [canvasRef.current]);
+    }, [canvasRef.current, item]);
 
     return (
-        <div className={`rde-editor-items ${Boolean(collapse) ? 'minimize' : ''}`}>
+        <div className={`rde-editor-items rde-editor-left-panel ${Boolean(collapse) ? 'minimize' : ''}`}>
             <Flex flex="1" flexDirection="column" style={{ height: '100%' }}>
                 <Flex justifyContent="center" alignItems="center" style={{ height: 40 }}>
                     <CommonButton
@@ -283,44 +309,49 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
                         shape="circle"
                         className="rde-action-btn"
                         style={{ margin: '0 4px' }}
-                        onClick={handlers.current?.onCollapse}
+                        onClick={handlers?.onCollapse}
                     />
                     {collapse ? (null) : (
                         <Input
                             style={{ margin: '8px' }}
                             placeholder={i18n.t('action.search-list')}
-                            onChange={handlers.current?.onSearchNode}
+                            onChange={handlers?.onSearchNode}
                             value={textSearch}
                             allowClear
                         />
                     )}
                 </Flex>
                 <Scrollbar>
-                    <Flex flex="1" style={{ overflowY: 'hidden' }}>
-                        {((textSearch?.length > 0) && renderItems(filteredDescriptors)) ||
-                            (collapse ? (
+                    <Flex className="rde-editor-left-panel" flex="1" style={{}}>
+                        {((textSearch?.length > 0) && _renderItems(filteredDescriptors)) ||
+                            ((collapse) ? (
                                 <Flex
                                     flexWrap="wrap"
                                     flexDirection="column"
                                     style={{ width: '100%' }}
                                     justifyContent="center"
                                 >
-                                    {handlers.current?.transformList().map(item => renderItem(item))}
+                                    {handlers?.transformList().map((item) => _renderItem(item))}
                                 </Flex>
                             ) : (
-                                <Collapse
-                                    style={{ width: '100%' }}
-                                    bordered={false}
-                                    activeKey={(activeKey?.length > 0) ? activeKey : Object.keys(descriptors)}
-                                    onChange={handlers.current?.onChangeActiveKey}
+                                <Tabs
+                                    className="rde-editor-left-panel-menu-tabs"
+                                    tabPosition="left"
+                                    activeKey={activeKey}
+                                    onChange={handlers?.onChangeTab}
+                                    tabBarStyle={{ marginTop: 20 }}
                                     items={
-                                        Object.keys(descriptors).map(key => (
-                                            {
-                                                key,
-                                                label: key,
-                                                children: renderItems(Object.values(descriptors[key]))
-                                            }
-                                        ))
+                                        descriptors?.map((menu) => ({
+                                            className: 'rde-editor-left-panel-menu-tab',
+                                            key: menu.name,
+                                            label: (
+                                                <div>
+                                                    <Icon prefix={menu.icon.prefix} name={menu.icon?.name} />
+                                                    <h5>{menu.name}</h5>
+                                                </div>
+                                            ),
+                                            children: _renderItems(menu?.children ?? [])
+                                        }))
                                     }
                                 />
                             ))}
@@ -329,14 +360,16 @@ const ImageMapItems: FC<OwnProps> = forwardRef(({
             </Flex>
             <SVGModal
                 visible={svgModalVisible}
-                onOk={handlers.current?.onAddSVG}
-                onCancel={handlers.current?.onSVGModalVisible}
+                onOk={handlers?.onAddSVG}
+                onCancel={handlers?.onSVGModalVisible}
                 option={svgOption}
             />
         </div>
     )
 });
 
-export { ImageMapItems };
+const EditorLeftPanel = memo(EditorLeftPanelComponent);
 
-export default ImageMapItems;
+export { EditorLeftPanel };
+
+export default EditorLeftPanel;

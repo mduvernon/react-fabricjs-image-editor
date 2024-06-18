@@ -42,8 +42,8 @@ const Iframe = fabric.util.createClass(fabric.Rect, {
 		if (!this.element) {
 			const { id, scaleX, scaleY, width, height, angle, editable, src } = this;
 			const zoom = this.canvas.getZoom();
-			const left = this.calcCoords().tl.x;
-			const top = this.calcCoords().tl.y;
+			const left = this.aCoords.tl.x;
+			const top = this.aCoords.tl.y;
 			const padLeft = (width * scaleX * zoom - width) / 2;
 			const padTop = (height * scaleY * zoom - height) / 2;
 			this.iframeElement = fabric.util.makeElement('iframe', {

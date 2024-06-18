@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/mduvernon/react-fabricjs-image-editor/issues"
   },
-  "homepage": "https://mduvernon.github.io/react-fabricjs-image-editor",
+  "homepage": "hhttps://github.com/mduvernon/react-fabricjs-image-editor",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

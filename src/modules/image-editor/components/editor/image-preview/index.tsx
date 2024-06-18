@@ -15,7 +15,7 @@ type OwnProps = {
     objects?: any;
 };
 
-const ImageMapPreview: FC<OwnProps> = ({
+const EditorImagePreview: FC<OwnProps> = ({
     preview,
     onChangePreview,
     onTooltip,
@@ -62,6 +62,6 @@ const ImageMapPreview: FC<OwnProps> = ({
     )
 };
 
-export { ImageMapPreview };
+export { EditorImagePreview };
 
-export default ImageMapPreview;
+export default EditorImagePreview;

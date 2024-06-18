@@ -10,8 +10,8 @@ import {
 } from 'common/components';
 // Components
 import {
-    ImageMapList
-} from "../image-map-list";
+    LayersList
+} from "./layers-list";
 
 type OwnProps = {
     canvasRef: any;
@@ -19,7 +19,7 @@ type OwnProps = {
     onSelect: (item: any) => void;
 }
 
-const ImageMapHeaderToolbar: FC<OwnProps> = ({
+const EditorHeaderToolbar: FC<OwnProps> = ({
     canvasRef,
     selectedItem,
     onSelect
@@ -37,7 +37,7 @@ const ImageMapHeaderToolbar: FC<OwnProps> = ({
                     tooltipTitle={i18n.t('action.canvas-list')}
                 />
                 <div className="rde-canvas-list">
-                    <ImageMapList canvasRef={canvasRef} selectedItem={selectedItem} />
+                    <LayersList canvasRef={canvasRef} selectedItem={selectedItem} />
                 </div>
             </Flex.Item>
             <Flex.Item className="rde-canvas-toolbar rde-canvas-toolbar-alignment">
@@ -200,6 +200,6 @@ const ImageMapHeaderToolbar: FC<OwnProps> = ({
     );
 };
 
-export { ImageMapHeaderToolbar };
+export { EditorHeaderToolbar };
 
-export default ImageMapHeaderToolbar;
+export default EditorHeaderToolbar;

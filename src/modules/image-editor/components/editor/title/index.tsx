@@ -9,7 +9,7 @@ type OwnProps = PropsWithChildren & {
     action?: ReactElement;
 }
 
-const ImageMapTitle: FC<OwnProps> = ({
+const EditorTitle: FC<OwnProps> = ({
     title,
     content,
     action,
@@ -29,7 +29,9 @@ const ImageMapTitle: FC<OwnProps> = ({
                         justifyContent="flex-start"
                         alignItems="center"
                     >
-                        {title instanceof String ? <h3>{title}</h3> : title}
+                        {title instanceof String ? (
+                            <h3 dangerouslySetInnerHTML={{ __html: String(title) }} />
+                        ) : (title)}
                     </Flex>
                 </Flex.Item>
                 <Flex.Item flex="auto">
@@ -48,6 +50,6 @@ const ImageMapTitle: FC<OwnProps> = ({
     )
 }
 
-export { ImageMapTitle };
+export { EditorTitle };
 
-export default ImageMapTitle;
+export default EditorTitle;

@@ -1,6 +1,6 @@
 
 // React
-import { Children, FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 // Ant Designs
 import { Badge, Button, Menu, Popconfirm } from 'antd';
 // Lodash
@@ -10,19 +10,21 @@ import i18n from 'i18next';
 // Common Components
 import { CommonButton, Content } from "common/components";
 // Components
-import { ImageMapConfigurations } from "../image-map-configurations";
-import { ImageMapHeaderToolbar } from "../image-map-header-toolbar";
-import { ImageMapFooterToolbar } from "../image-map-footer-toolbar";
-import { ImageMapPreview } from "../image-map-preview";
-import { ImageMapTitle } from "../image-map-title";
-import { ImageMapItems } from "../image-map-items";
+import { EditorHeaderToolbar } from "./header-toolbar";
+import { EditorFooterToolbar } from "./footer-toolbar";
+import { EditorImagePreview } from "./image-preview";
+import { EditorRightPanel } from "./right-panel";
+import { EditorLeftPanel } from "./left-panel";
+import { EditorTitle } from "./title";
 // Canvas
 import { Canvas, FabricObjectOption } from "modules/canvas";
 // Common Classes
 import { SandBox } from "common/classes";
+// Constants
+import { MENU } from "../../constants/menu.constants";
 // Styles
 import 'assets/fontawesome/css/all.css';
-import 'assets/style/index.scss';
+import 'assets/style/style.scss';
 
 const propertiesToInclude = [
     'id',
@@ -84,7 +86,7 @@ const defaultOption: FabricObjectOption = {
 
 type OwnProps = {};
 
-const ImageMapEditor: FC<OwnProps> = () => {
+const Editor: FC<OwnProps> = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [zoomRatio, setZoomRatio] = useState(1);
     const [preview, setPreview] = useState(false);
@@ -94,11 +96,11 @@ const ImageMapEditor: FC<OwnProps> = () => {
     const [styles, setStyles] = useState([]);
     const [dataSources, setDataSources] = useState([]);
     const [editing, setEditing] = useState(false);
-    const [descriptors, setDescriptors] = useState({});
+    const [descriptors, setDescriptors] = useState([]);
     const [objects, setObjects] = useState([]);
 
     const canvasRef = useRef(null);
-    const itemsRef = useRef(null);
+    const leftPanelRef = useRef(null);
     const container = useRef(null);
     const handlersRef = useRef(null);
     const canvasHandlersRef = useRef(null);
@@ -106,7 +108,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
     const canvasHandlers = useRef({
         onAdd: (target) => {
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
             if (target.type === 'activeSelection') {
@@ -145,7 +147,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
         onRemove: () => {
 
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
             canvasHandlers.current?.onSelect(null);
@@ -153,7 +155,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
         onModified: debounce(() => {
 
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
         }, 300),
@@ -163,7 +165,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
         onChange: (selectedItem, changedValues, allValues) => {
 
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
             const changedKey = Object.keys(changedValues)[0];
@@ -455,7 +457,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
                             return {
                                 key: item.name,
                                 label: i18n.t(`imagemap.${item.name}`),
-                                Children: itemsRef.current?.renderItem(newItem, false)
+                                Children: leftPanelRef.current?.renderItem(newItem, false)
                             };
                         })}
                     />
@@ -566,7 +568,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
         },
         onImport: (files) => {
             if (files) {
-                showLoading(true);
+                setLoading(true);
                 setTimeout(() => {
                     const reader = new FileReader();
 
@@ -598,10 +600,10 @@ const ImageMapEditor: FC<OwnProps> = () => {
                         }
                     };
                     reader.onloadend = () => {
-                        showLoading(false);
+                        setLoading(false);
                     };
                     reader.onerror = () => {
-                        showLoading(false);
+                        setLoading(false);
                     };
                     reader.readAsText(files[0]);
                 }, 500);
@@ -623,7 +625,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
             inputEl.remove();
         },
         onDownload: () => {
-            showLoading(true);
+            setLoading(true);
 
             const objects = canvasRef.current?.handler.exportJSON().filter(obj => {
                 if (!obj.id) {
@@ -651,25 +653,25 @@ const ImageMapEditor: FC<OwnProps> = () => {
             anchorEl.click();
             anchorEl.remove();
 
-            showLoading(false);
+            setLoading(false);
         },
         onChangeAnimations: animations => {
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
             setAnimations(animations);
         },
         onChangeStyles: styles => {
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
             setStyles(styles);
         },
         onChangeDataSources: dataSources => {
             if (!editing) {
-                changeEditing(true);
+                setEditing(true);
             }
 
             setDataSources(dataSources);
@@ -681,13 +683,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
 
 
     useEffect(() => {
-        showLoading(true);
-
-        import('./descriptors.json').then((descriptors) => {
-            setDescriptors(descriptors);
-
-            showLoading(false);
-        });
+        setDescriptors(MENU);
 
         setSelectedItem(null);
     }, []);
@@ -701,18 +697,10 @@ const ImageMapEditor: FC<OwnProps> = () => {
         );
     };
 
-    const showLoading = (loading) => {
-        setLoading(loading);
-    };
-
-    const changeEditing = (editing) => {
-        setEditing(editing);
-    };
-
     return (
         <Content
             title={
-                <ImageMapTitle
+                <EditorTitle
                     title={
                         <Fragment>
                             <span>{i18n.t('imagemap.imagemap-editor')}</span>
@@ -728,7 +716,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
                                 onClick={handlers.current?.onDownload}
                                 tooltipPlacement="bottomRight"
                             />
-                            {editing ? (
+                            {(editing) ? (
                                 <Popconfirm
                                     title={i18n.t('imagemap.imagemap-editing-confirm')}
                                     okText={i18n.t('action.ok')}
@@ -768,14 +756,14 @@ const ImageMapEditor: FC<OwnProps> = () => {
             }
         >
             <div className="rde-editor">
-                <ImageMapItems
-                    ref={itemsRef}
+                <EditorLeftPanel
+                    ref={leftPanelRef}
                     canvasRef={canvasRef}
                     descriptors={descriptors}
                 />
                 <div className="rde-editor-canvas-container">
                     <div className="rde-editor-header-toolbar">
-                        <ImageMapHeaderToolbar
+                        <EditorHeaderToolbar
                             canvasRef={canvasRef}
                             selectedItem={selectedItem}
                             onSelect={canvasHandlers?.current?.onSelect}
@@ -810,7 +798,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
                         />
                     </div>
                     <div className="rde-editor-footer-toolbar">
-                        <ImageMapFooterToolbar
+                        <EditorFooterToolbar
                             canvasRef={canvasRef}
                             preview={preview}
                             onChangePreview={handlers.current?.onChangePreview}
@@ -818,7 +806,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
                         />
                     </div>
                 </div>
-                <ImageMapConfigurations
+                <EditorRightPanel
                     canvasRef={canvasRef}
                     onChange={canvasHandlers.current?.onChange}
                     selectedItem={selectedItem}
@@ -829,7 +817,7 @@ const ImageMapEditor: FC<OwnProps> = () => {
                     styles={styles}
                     dataSources={dataSources}
                 />
-                <ImageMapPreview
+                <EditorImagePreview
                     preview={preview}
                     onChangePreview={handlers.current?.onChangePreview}
                     onTooltip={canvasHandlers.current?.onTooltip}
@@ -841,6 +829,6 @@ const ImageMapEditor: FC<OwnProps> = () => {
     )
 }
 
-export { ImageMapEditor }
+export { Editor }
 
-export default ImageMapEditor;
+export default Editor;

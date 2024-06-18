@@ -3,6 +3,7 @@ import { FC, HTMLAttributes } from "react";
 import FlexItem from "./item";
 
 type OwnProps = HTMLAttributes<any> & {
+    className?: string;
     display?: 'flex' | 'inline-flex';
     flexDirection?: 'column-reverse' | 'column' | 'row-reverse' | 'row';
     flexWrap?: 'nowrap' | 'wrap-reverse' | 'wrap';
@@ -23,6 +24,7 @@ type FlexComponent = FC<OwnProps> & {
 };
 
 const Flex: FlexComponent = ({
+    className = '',
     display,
     flexDirection,
     flexWrap,
@@ -63,6 +65,7 @@ const Flex: FlexComponent = ({
 
     return (
         <div
+            className={`rde-flex ${className}`}
             style={Object.keys(newStyle).reduce((prev, key) => {
                 if (newStyle[key]) {
                     return Object.assign(prev, { [key]: newStyle[key] });

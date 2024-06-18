@@ -1,5 +1,5 @@
 // React
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useState } from "react";
 // Ant Designs
 import { Tabs } from 'antd';
 // Common Components
@@ -8,12 +8,12 @@ import {
     Icon
 } from "common/components";
 // Components
-import { Animations } from "../animations";
-import { Styles } from "../styles";
+import { Animations } from "../../animations";
+import { Styles } from "../../styles";
 import {
     MapProperties,
     NodeProperties
-} from "../properties";
+} from "../../properties";
 
 type OwnProps = {
     canvasRef: any;
@@ -27,7 +27,7 @@ type OwnProps = {
     dataSources: any[];
 };
 
-const ImageMapConfigurations: FC<OwnProps> = ({
+const EditorRightPanel: FC<OwnProps> = ({
     onChange,
     selectedItem,
     canvasRef,
@@ -41,14 +41,14 @@ const ImageMapConfigurations: FC<OwnProps> = ({
     const [activeKey, setActiveKey] = useState('map');
     const [collapse, setCollapse] = useState(false);
 
-    const handlers = useRef({
+    const handlers = useMemo(() => ({
         onChangeTab: (activeKey) => {
             setActiveKey(activeKey);
         },
         onCollapse: () => {
             setCollapse((prevCollapse) => !prevCollapse);
         },
-    });
+    }), []);
 
     return (
         <div className={`rde-editor-configurations ${Boolean(collapse) ? 'minimize' : ''}`}>
@@ -56,7 +56,7 @@ const ImageMapConfigurations: FC<OwnProps> = ({
                 className="rde-action-btn rde-editor-configurations-action-btn"
                 shape="circle"
                 icon={collapse ? 'angle-double-left' : 'angle-double-right'}
-                onClick={handlers.current?.onCollapse}
+                onClick={handlers?.onCollapse}
                 style={{ position: 'absolute', top: 16, right: 16, zIndex: 1000 }}
             />
             <Tabs
@@ -64,7 +64,7 @@ const ImageMapConfigurations: FC<OwnProps> = ({
                 tabPosition="right"
                 style={{ height: '100%' }}
                 activeKey={activeKey}
-                onChange={handlers.current?.onChangeTab}
+                onChange={handlers?.onChangeTab}
                 tabBarStyle={{ marginTop: 60 }}
                 items={
                     [
@@ -100,6 +100,6 @@ const ImageMapConfigurations: FC<OwnProps> = ({
     )
 };
 
-export { ImageMapConfigurations };
+export { EditorRightPanel };
 
-export default ImageMapConfigurations;
+export default EditorRightPanel;

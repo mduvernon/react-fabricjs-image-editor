@@ -1,16 +1,17 @@
 // React
-import { FC, useRef, useState, Fragment } from 'react';
+import { FC, useState, Fragment, useMemo } from 'react';
 // Ant Design
 import { Button, Switch, Tooltip } from 'antd';
 // i18next
 import i18n from 'i18next';
 // Canvas constants
 import { code } from 'modules/canvas/constants';
+// Common hooks
+import { useDeepCompareEffect } from 'common/hooks';
 // Common components
 import {
     CommonButton
 } from 'common/components';
-import { useDeepCompareEffect } from 'common/hooks';
 
 type OwnProps = {
     canvasRef: any;
@@ -19,7 +20,7 @@ type OwnProps = {
     zoomRatio: number;
 }
 
-const ImageMapFooterToolbar: FC<OwnProps> = ({
+const EditorFooterToolbar: FC<OwnProps> = ({
     canvasRef,
     preview,
     onChangePreview,
@@ -35,14 +36,14 @@ const ImageMapFooterToolbar: FC<OwnProps> = ({
     }, [canvasRef.current]);
 
     const attachEventListener = (canvasRef) => {
-        canvasRef.current?.canvas?.wrapperEl.addEventListener('keydown', events.current?.keydown, false);
+        canvasRef.current?.canvas?.wrapperEl.addEventListener('keydown', events?.keydown, false);
     };
 
     const detachEventListener = (canvasRef) => {
-        canvasRef.current?.canvas?.wrapperEl.removeEventListener('keydown', events.current?.keydown);
+        canvasRef.current?.canvas?.wrapperEl.removeEventListener('keydown', events?.keydown);
     };
 
-    const handlers = useRef({
+    const handlers = useMemo(() => ({
         selection: () => {
             if (canvasRef.current?.handler.interactionHandler.isDrawingMode()) {
                 return;
@@ -61,22 +62,22 @@ const ImageMapFooterToolbar: FC<OwnProps> = ({
 
             setInteractionMode('grab');
         },
-    });
+    }), [canvasRef.current]);
 
-    const events = useRef({
+    const events = useMemo(() => ({
         keydown: (e: any) => {
             if (canvasRef.current?.canvas?.wrapperEl !== document.activeElement) {
                 return false;
             }
 
             if (e.code === code.KEY_Q) {
-                handlers.current?.selection();
+                handlers?.selection();
 
             } else if (e.code === code.KEY_W) {
-                handlers.current?.grab();
+                handlers?.grab();
             }
         },
-    });
+    }), [canvasRef.current]);
 
     if (!canvasRef?.current) {
         return null;
@@ -92,7 +93,7 @@ const ImageMapFooterToolbar: FC<OwnProps> = ({
                         type={interactionMode === 'selection' ? 'primary' : 'default'}
                         style={{ borderBottomLeftRadius: '8px', borderTopLeftRadius: '8px' }}
                         onClick={() => {
-                            handlers.current?.selection();
+                            handlers?.selection();
                         }}
                         icon="mouse-pointer"
                         tooltipTitle={i18n.t('action.selection')}
@@ -101,7 +102,7 @@ const ImageMapFooterToolbar: FC<OwnProps> = ({
                         type={interactionMode === 'grab' ? 'primary' : 'default'}
                         style={{ borderBottomRightRadius: '8px', borderTopRightRadius: '8px' }}
                         onClick={() => {
-                            handlers.current?.grab();
+                            handlers?.grab();
                         }}
                         tooltipTitle={i18n.t('action.grab')}
                         icon="hand-rock"
@@ -152,6 +153,6 @@ const ImageMapFooterToolbar: FC<OwnProps> = ({
     )
 }
 
-export { ImageMapFooterToolbar };
+export { EditorFooterToolbar };
 
-export default ImageMapFooterToolbar;
+export default EditorFooterToolbar;

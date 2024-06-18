@@ -2,14 +2,14 @@
 import { FC, useState } from 'react';
 import { Helmet } from 'react-helmet';
 // Modules
-import { ImageMapEditor } from 'modules/editor-imagemap';
+import { ImageEditor } from 'modules/image-editor';
 import { FlowContainer, Title } from 'common/components';
 
-type EditorType = 'imagemap' | 'workflow' | 'flow' | 'hexgrid' | 'fiber';
+type EditorType = 'image' | 'workflow' | 'flow' | 'hexgrid' | 'fiber';
 
 const App: FC = () => {
 
-	const [activeEditor, setActiveEditor] = useState<EditorType>('imagemap');
+	const [activeEditor, setActiveEditor] = useState<EditorType>('image');
 
 	const handleChangeEditor = ({ key }) => {
 		setActiveEditor(key);
@@ -17,8 +17,8 @@ const App: FC = () => {
 
 	const renderEditor = (activeEditor: EditorType) => {
 		switch (activeEditor) {
-			case 'imagemap':
-				return <ImageMapEditor />;
+			case 'image':
+				return <ImageEditor />;
 			case 'workflow':
 			// return <WorkflowEditor />;
 			case 'flow':
