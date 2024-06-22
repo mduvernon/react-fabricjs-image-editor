@@ -23,9 +23,12 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[0]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag" checked={Boolean(filters[0])}>
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[0]}
+                            >
                                 {'G'}
-                            </Tag.CheckableTag>,
+                            </Tag.CheckableTag>
                         </Form.Item>
                     </Col>
                     <Col md={24} lg={6}>
@@ -34,11 +37,12 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[1]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[1])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[1]}
                             >
                                 {'I'}
-                            </Tag.CheckableTag>,
+                            </Tag.CheckableTag>
                         </Form.Item>
                     </Col>
                     <Col md={24} lg={6}>
@@ -47,8 +51,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[3]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[3])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[3]}
                             >
                                 {'S'}
                             </Tag.CheckableTag>
@@ -60,8 +65,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[4]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[4])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[4]}
                             >
                                 {'B'}
                             </Tag.CheckableTag>
@@ -75,8 +81,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[9]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[9])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[9]}
                             >
                                 {'V'}
                             </Tag.CheckableTag>
@@ -88,8 +95,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[19]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[19])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[19]}
                             >
                                 {'B'}
                             </Tag.CheckableTag>
@@ -101,8 +109,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[14]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[14])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[14]}
                             >
                                 {'T'}
                             </Tag.CheckableTag>
@@ -114,8 +123,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[15]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[15])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[15]}
                             >
                                 {'P'}
                             </Tag.CheckableTag>
@@ -129,8 +139,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[12]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[12])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[12]}
                             >
                                 {'S'}
                             </Tag.CheckableTag>
@@ -142,8 +153,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[13]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[13])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[13]}
                             >
                                 {'E'}
                             </Tag.CheckableTag>
@@ -157,8 +169,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[17]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[17])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[17]}
                             >
                                 {'G'}
                             </Tag.CheckableTag>
@@ -196,8 +209,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[5]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[5])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[5]}
                             >
                                 {'B'}
                             </Tag.CheckableTag>
@@ -219,8 +233,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[6]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[6])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[6]}
                             >
                                 {'C'}
                             </Tag.CheckableTag>
@@ -242,8 +257,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[7]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[7])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[7]}
                             >
                                 {'S'}
                             </Tag.CheckableTag>
@@ -265,8 +281,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[21]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[21])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[21]}
                             >
                                 {'H'}
                             </Tag.CheckableTag>
@@ -288,8 +305,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[8]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[8])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[8]}
                             >
                                 {'N'}
                             </Tag.CheckableTag>
@@ -311,8 +329,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[10]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[10])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[10]}
                             >
                                 {'P'}
                             </Tag.CheckableTag>
@@ -334,8 +353,9 @@ const ImageFilterProperty = {
                             valuePropName="checked"
                             initialValue={!!filters[11]}
                         >
-                            <Tag.CheckableTag className="rde-action-tag"
-                                checked={Boolean(filters[11])}
+                            <Tag.CheckableTag
+                                className="rde-action-tag"
+                                checked={!!filters[11]}
                             >
                                 {'B'}
                             </Tag.CheckableTag>

@@ -1,5 +1,5 @@
 // React
-import { FC } from "react";
+import { FC, useState } from "react";
 // i18next
 import i18n from 'i18next';
 // Common components
@@ -24,8 +24,13 @@ const EditorHeaderToolbar: FC<OwnProps> = ({
     selectedItem,
     onSelect
 }) => {
+    const [showLayersList, setShowLayersList] = useState<boolean>(false);
 
     const isCropping = Boolean(canvasRef.current) ? canvasRef.current?.handler?.interactionMode === 'crop' : false;
+
+    const _toggleLayersList = () => {
+        setShowLayersList(!showLayersList);
+    }
 
     return (
         <Flex className="rde-editor-header-toolbar-container" flex="1">
@@ -35,10 +40,13 @@ const EditorHeaderToolbar: FC<OwnProps> = ({
                     shape="circle"
                     icon="layer-group"
                     tooltipTitle={i18n.t('action.canvas-list')}
+                    onClick={_toggleLayersList}
                 />
-                <div className="rde-canvas-list">
-                    <EditorLayersList canvasRef={canvasRef} selectedItem={selectedItem} />
-                </div>
+                {showLayersList && (
+                    <div className="rde-canvas-list">
+                        <EditorLayersList canvasRef={canvasRef} selectedItem={selectedItem} />
+                    </div>
+                )}
             </Flex.Item>
             <Flex.Item className="rde-canvas-toolbar rde-canvas-toolbar-alignment">
                 <CommonButton

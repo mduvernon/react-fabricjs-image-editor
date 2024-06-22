@@ -1548,55 +1548,89 @@ class Handler implements HandlerOptions {
 		if (typeof json === 'string') {
 			json = JSON.parse(json);
 		}
+
 		let prevLeft = 0;
 		let prevTop = 0;
-		this.canvas.setBackgroundColor(this.canvasOption.backgroundColor, this.canvas.renderAll.bind(this.canvas));
+
+		this.canvas.setBackgroundColor(
+			this.canvasOption.backgroundColor,
+			this.canvas.renderAll.bind(this.canvas)
+		);
+
 		const workarea = json.find((obj: FabricObjectOption) => obj.id === 'workarea');
+
 		if (!this.workarea) {
 			this.workareaHandler.initialize();
 		}
+
 		if (workarea) {
 			prevLeft = workarea.left;
 			prevTop = workarea.top;
+
 			this.workarea.set(workarea);
+
 			await this.workareaHandler.setImage(workarea.src, true);
+
 			this.workarea.setCoords();
+
 		} else {
 			this.canvas.centerObject(this.workarea);
 			this.workarea.setCoords();
+
 			prevLeft = this.workarea.left;
 			prevTop = this.workarea.top;
 		}
+
 		json.forEach((obj: FabricObjectOption) => {
 			if (obj.id === 'workarea') {
 				return;
 			}
+
 			const canvasWidth = this.canvas.getWidth();
 			const canvasHeight = this.canvas.getHeight();
-			const { width, height, scaleX, scaleY, layout, left, top } = this.workarea;
+
+			const {
+				width,
+				height,
+				scaleX,
+				scaleY,
+				layout,
+				left,
+				top
+			} = this.workarea;
+
 			if (layout === 'fullscreen') {
 				const leftRatio = canvasWidth / (width * scaleX);
 				const topRatio = canvasHeight / (height * scaleY);
+
 				obj.left *= leftRatio;
 				obj.top *= topRatio;
 				obj.scaleX *= leftRatio;
 				obj.scaleY *= topRatio;
+
 			} else {
 				const diffLeft = left - prevLeft;
 				const diffTop = top - prevTop;
+
 				obj.left += diffLeft;
 				obj.top += diffTop;
+
 			}
+
 			if (obj.superType === 'element') {
 				obj.id = uuid();
 			}
+
 			this.add(obj, false, true);
 			this.canvas.renderAll();
 		});
+
 		this.objects = this.getObjects();
+
 		if (callback) {
 			callback(this.canvas);
 		}
+
 		return Promise.resolve(this.canvas);
 	};
 
@@ -1943,6 +1977,7 @@ class Handler implements HandlerOptions {
 	 */
 	public setWorkareaOption = (workareaOption: WorkareaOption) => {
 		this.workareaOption = Object.assign({}, this.workareaOption, workareaOption);
+
 		if (this.workarea) {
 			this.workarea.set({
 				...workareaOption,
@@ -1957,6 +1992,7 @@ class Handler implements HandlerOptions {
 	 */
 	public setGuidelineOption = (guidelineOption: GuidelineOption) => {
 		this.guidelineOption = Object.assign({}, this.guidelineOption, guidelineOption);
+
 		if (this.guidelineHandler) {
 			this.guidelineHandler.initialize();
 		}

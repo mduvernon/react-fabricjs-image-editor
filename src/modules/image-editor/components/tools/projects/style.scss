@@ -1,0 +1,25 @@
+.rde-editor__tools-projects {
+    height: 100%;
+    width: 100%;
+
+    .rde-editor__tools-projects-header {
+        justify-content: center;
+
+        .title {
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+
+        .create-btn {
+            width: 100%;
+        }
+    }
+
+    .rde-editor__tools-projects-carousel {
+        margin-top: 20px;
+        height: calc(100% - 60px);
+        width: calc(100% - 15px);
+        position: absolute;
+        overflow-y: auto;
+    }
+}

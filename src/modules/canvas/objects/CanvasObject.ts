@@ -1,6 +1,7 @@
 import { fabric } from 'fabric';
 
 import { FabricObject } from '../utils';
+
 import { Cube } from './Cube';
 import { Line } from './Line';
 import { Arrow } from './Arrow';
@@ -48,18 +49,20 @@ const CanvasObject: CanvasObjectSchema = {
 		create: (option: any) => new Cube(option),
 	},
 	image: {
-		create: ({ element = new Image(), ...option }) =>
+		create: ({ element = new Image(), ...option }) => (
 			new fabric.Image(element, {
 				...option,
 				crossOrigin: 'anonymous',
-			}),
+			})
+		)
 	},
 	polygon: {
-		create: ({ points, ...option }: { points: any }) =>
+		create: ({ points, ...option }: { points: any }) => (
 			new fabric.Polygon(points, {
 				...option,
 				perPixelTargetFind: true,
-			}),
+			})
+		)
 	},
 	line: {
 		create: ({ points, ...option }: { points: any }) => new Line(points, option),
@@ -68,7 +71,7 @@ const CanvasObject: CanvasObjectSchema = {
 		create: ({ points, ...option }: { points: any }) => new Arrow(points, option),
 	},
 	chart: {
-		create: (option: any) =>
+		create: (option: any) => (
 			new Chart(
 				option.chartOption || {
 					xAxis: {},
@@ -86,7 +89,8 @@ const CanvasObject: CanvasObjectSchema = {
 					],
 				},
 				option,
-			),
+			)
+		)
 	},
 	element: {
 		create: ({ code, ...option }: { code: Code }) => new Element(code, option),

@@ -1,0 +1,21 @@
+.rde-editor__tools-resize-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .rde-editor__tools-resize-width-input-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .rde-editor__tools-resize-height-input-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .rde-editor__tools-resize-options-container {
+        flex: 1;
+    }
+}

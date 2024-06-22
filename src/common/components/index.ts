@@ -1,6 +1,7 @@
 // Export all components
 
 export * from './ace';
+export * from './carousel';
 export * from './chart-modal';
 export * from './code-modal';
 export * from './color-picker';
@@ -16,9 +17,13 @@ export * from './input-html';
 export * from './input-json';
 export * from './input-script';
 export * from './input-template';
+export * from './label';
 export * from './layout';
+export * from './masonry';
+export * from './modal';
 export * from './scrollbar';
 export * from './shortcut-help';
 export * from './svg-modal';
+export * from './textarea';
 export * from './url-modal';
 export * from './wireframe';

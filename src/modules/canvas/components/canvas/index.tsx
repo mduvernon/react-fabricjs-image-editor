@@ -72,6 +72,7 @@ const Canvas: FC<OwnProps> = forwardRef(({
 }, canvasRef$: Ref<any>) => {
     const [loaded, setLoaded] = useState<boolean>(false);
     const [id, setId] = useState<string>(uuid());
+    const [render, rerender] = useState(false);
 
     const handler = useRef<Handler>(null);
     const canvas = useRef<fabric.Canvas>(null);
@@ -163,6 +164,7 @@ const Canvas: FC<OwnProps> = forwardRef(({
             handler: handler.current,
             canvas: canvas.current,
             container: container.current,
+            rerender: _handleRerender,
         };
     }, [handler.current, canvas.current, container.current]);
 
@@ -197,6 +199,11 @@ const Canvas: FC<OwnProps> = forwardRef(({
         if (typeof onLoad === 'function') {
             onLoad(handler.current, canvas.current);
         }
+    };
+
+    const _handleRerender = () => {
+        rerender((prev) => !prev);
+        canvas.current.renderAll();
     };
 
     return (

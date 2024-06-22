@@ -193,25 +193,25 @@ export type FabricGroup = FabricObject<fabric.Group> & {
 	objects?: FabricObject[];
 };
 
-export type FabricImage = FabricObject &
-	fabric.Image & {
-		/**
-		 * Image URL
-		 * @type {string}
-		 */
-		src?: string;
-		/**
-		 * Image File or Blob
-		 * @type {File}
-		 */
-		file?: File;
-		/**
-		 * Image Filter
-		 * @type {IFilter[]}
-		 */
-		filters?: IFilter[];
-		_element?: any;
-	};
+export type FabricImage = FabricObject & fabric.Image & {
+	/**
+	 * Image URL
+	 * @type {string}
+	 */
+	src?: string;
+	/**
+	 * Image File or Blob
+	 * @type {File}
+	 */
+	file?: File;
+	/**
+	 * Image Filter
+	 * @type {IFilter[]}
+	 */
+	filters?: IFilter[];
+
+	_element?: any;
+};
 
 export interface FabricElement extends FabricObject<fabric.Rect> {
 	/**

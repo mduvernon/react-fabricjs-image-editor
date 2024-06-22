@@ -1,8 +1,8 @@
 {
 	"imagemap": {
-		"imagemap": "Image Map",
-		"imagemap-editing-confirm": "The image map contents have been modified. Do you want to do that anyway?",
-		"imagemap-editor": "Image Map Editor",
+		"imagemap": "Image",
+		"imagemap-editing-confirm": "The image contents have been modified. Do you want to do that anyway?",
+		"imagemap-editor": "Image Editor",
 		"marker": {
 			"choose-icon": "Choose icon from Fontawesome",
 			"search-icon": "Search {{length}} icons for..."

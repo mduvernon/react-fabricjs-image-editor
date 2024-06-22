@@ -1,0 +1,47 @@
+.rde-editor__textarea {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-style: normal;
+    font-weight: normal;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    font-style: normal;
+    font-weight: normal;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    &.disabled {
+        color: var(--disabled);
+        .icon {
+            color: var(--icons-muted);
+        }
+    }
+
+    cursor: pointer;
+
+    &.error {
+        color: var(--error) !important;
+    }
+
+    .text {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .icon {
+        display: flex;
+
+        &.start {
+            margin-right: 4px;
+        }
+
+        &.end {
+            margin-left: 4px;
+        }
+
+        color: var(--icons-secondary);
+    }
+}

@@ -15,6 +15,7 @@ import {
 import {
     PropertyDefinition
 } from "../property-definition";
+import { useDeepCompareEffect } from "common/hooks";
 
 type OwnProps = {
     canvasRef: any;
@@ -40,7 +41,7 @@ const NodeProperties: FC<OwnProps> = ({
 
     return (
         <Scrollbar>
-            <Form className="rde-editor-node-properties" form={form} layout="vertical" colon={false} onValuesChange={_handleFormValuesChange}>
+            <Form form={form} className="rde-editor-node-properties" layout="vertical" colon={false} onValuesChange={_handleFormValuesChange}>
                 <Collapse className="rde-editor-node-properties-collapse" bordered={false}
                     items={selectedItem && PropertyDefinition[selectedItem?.type] ? (
                         Object.keys(PropertyDefinition[selectedItem.type]).map(key => ({

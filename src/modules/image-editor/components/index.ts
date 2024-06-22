@@ -1,5 +1,3 @@
-import { Editor as ImageEditor } from './editor'
+// Exports all required components
 
 export * from './editor'
-
-export { ImageEditor }

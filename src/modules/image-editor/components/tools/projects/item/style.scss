@@ -1,0 +1,62 @@
+.rde-editor__tools-project-item {
+    height: 150px;
+    width: 130px;
+    border: 1px solid #e0e0e0;
+    word-break: break-word;
+
+    &:hover {
+        border: 1px solid #000;
+        cursor: pointer;
+    }
+
+    &.active {
+        background-color: var(--color-primary);
+        border: 1px solid #000;
+    }
+
+    &[aria-selected="true"] {
+        background: var(--bg-primary-active);
+        border-radius: 4px;
+
+        * {
+            color: var(--accent-primary-active);
+        }
+    }
+
+    .rde-editor__tools-project-item-header {
+        .actions {
+            margin-left: auto;
+        }
+    }
+
+    .rde-editor__tools-project-item-img-wrapper {
+        height: 100px;
+        width: 100px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .rde-editor__tools-project-item-footer {
+        text-align: center;
+        font-size: 12px;
+        margin-top: 10px;
+        padding: 10px;
+        padding: 1em;
+        margin: auto;
+        word-break: break-word;
+        white-space: pre-line;
+        overflow-wrap: break-word;
+        -ms-word-break: break-word;
+        word-break: break-word;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+    }
+}
+
+.rde-editor__tools-project-item-dropdown {
+    .btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,27 @@
+.rde-editor__masonry-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    box-sizing: inherit;
+    unicode-bidi: isolate;
+    color-scheme: dark;
+    overflow: hidden;
+    // color: #f6f7f9;
+
+    .rde-editor__masonry-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3px;
+
+        .rde-editor__masonry-item {
+            padding: 4px;
+            display: inline-block;
+            list-style-type: none;
+            user-select: none;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

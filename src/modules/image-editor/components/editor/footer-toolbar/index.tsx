@@ -33,6 +33,10 @@ const EditorFooterToolbar: FC<OwnProps> = ({
         if (canvasRef.current) {
             attachEventListener(canvasRef);
         }
+
+        return () => {
+            detachEventListener(canvasRef);
+        };
     }, [canvasRef.current]);
 
     const attachEventListener = (canvasRef) => {
@@ -53,6 +57,7 @@ const EditorFooterToolbar: FC<OwnProps> = ({
 
             setInteractionMode('selection');
         },
+
         grab: () => {
             if (canvasRef.current?.handler.interactionHandler.isDrawingMode()) {
                 return;
@@ -62,7 +67,10 @@ const EditorFooterToolbar: FC<OwnProps> = ({
 
             setInteractionMode('grab');
         },
-    }), [canvasRef.current]);
+    }), [
+        canvasRef.current,
+        setInteractionMode
+    ]);
 
     const events = useMemo(() => ({
         keydown: (e: any) => {
@@ -77,7 +85,10 @@ const EditorFooterToolbar: FC<OwnProps> = ({
                 handlers?.grab();
             }
         },
-    }), [canvasRef.current]);
+    }), [
+        canvasRef.current,
+        handlers
+    ]);
 
     if (!canvasRef?.current) {
         return null;
@@ -92,18 +103,14 @@ const EditorFooterToolbar: FC<OwnProps> = ({
                     <CommonButton
                         type={interactionMode === 'selection' ? 'primary' : 'default'}
                         style={{ borderBottomLeftRadius: '8px', borderTopLeftRadius: '8px' }}
-                        onClick={() => {
-                            handlers?.selection();
-                        }}
+                        onClick={handlers?.selection}
                         icon="mouse-pointer"
                         tooltipTitle={i18n.t('action.selection')}
                     />
                     <CommonButton
                         type={interactionMode === 'grab' ? 'primary' : 'default'}
                         style={{ borderBottomRightRadius: '8px', borderTopRightRadius: '8px' }}
-                        onClick={() => {
-                            handlers?.grab();
-                        }}
+                        onClick={handlers?.grab}
                         tooltipTitle={i18n.t('action.grab')}
                         icon="hand-rock"
                     />

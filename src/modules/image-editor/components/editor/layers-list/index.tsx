@@ -4,6 +4,8 @@ import { FC, memo, useCallback, useMemo, useState, useEffect } from 'react';
 import { Button, Input } from 'antd';
 // i18next
 import i18next from 'i18next';
+// Common hooks
+import { useDeepCompareEffect } from 'common/hooks';
 // Common components
 import {
     Flex,
@@ -19,7 +21,7 @@ type OwnProps = {
     selectedItem: any;
 }
 
-const EditorLayersListComponent: FC<OwnProps> = ({
+const EditorLayersList: FC<OwnProps> = ({
     canvasRef,
     selectedItem
 }) => {
@@ -60,6 +62,10 @@ const EditorLayersListComponent: FC<OwnProps> = ({
 
     useEffect(() => {
         _initCanvasObjects();
+
+        return () => {
+            setCanvasObjects([]);
+        };
     }, []);
 
     const _initCanvasObjects = () => {
@@ -187,8 +193,6 @@ const EditorLayersListComponent: FC<OwnProps> = ({
         </Flex>
     );
 };
-
-const EditorLayersList = memo(EditorLayersListComponent);
 
 export { EditorLayersList };
 

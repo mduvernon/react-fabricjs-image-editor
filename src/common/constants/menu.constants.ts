@@ -1,312 +1,127 @@
-const MENU: any[] = [
-	{
-		name: "MARKER",
+import { ImageGallery } from "modules/image-editor/components/tools/image-gallery";
+import { Projects } from "modules/image-editor/components/tools/projects";
+import { Resize } from "modules/image-editor/components/tools/resize";
+import { Text } from "modules/image-editor/components/tools/text";
+
+import { TOOLS_PROPERTIES, TOOLS_TYPES } from "./tools.constants";
+
+export const MENU_TYPES = {
+	PROJECTS: "PROJECTS",
+	GALLERY: "GALLERY",
+	MARKER: "MARKER",
+	TEXT: "TEXT",
+	IMAGE: "IMAGE",
+	SHAPE: "SHAPE",
+	DRAWING: "DRAWING",
+	ELEMENT: "ELEMENT",
+	RESIZE: "RESIZE",
+	SVG: "SVG"
+};
+
+export const MENU_PROPERTIES = {
+	[MENU_TYPES.PROJECTS]: {
+		name: MENU_TYPES.PROJECTS,
+		description: "",
+		type: "projects",
+		icon: { prefix: "fas", name: "project-diagram" },
+		isInlineList: false,
+		isComponent: true,
+		children: Projects
+	},
+	[MENU_TYPES.GALLERY]: {
+		name: MENU_TYPES.GALLERY,
+		description: "",
+		type: "gallery",
+		icon: { prefix: "fas", name: "image" },
+		isInlineList: false,
+		isComponent: true,
+		children: ImageGallery
+	},
+	[MENU_TYPES.MARKER]: {
+		name: MENU_TYPES.MARKER,
 		description: "",
 		type: "marker",
 		icon: { prefix: "fas", name: "map-marker-alt" },
+		isInlineList: true,
 		children: [
-			{
-				"name": "Marker",
-				"description": "",
-				"type": "marker",
-				"icon": {
-					"prefix": "fas",
-					"name": "map-marker-alt"
-				},
-				"option": {
-					"type": "i-text",
-					"text": "\uf3c5",
-					"fontFamily": "Font Awesome 5 Free",
-					"fontWeight": 900,
-					"fontSize": 60,
-					"width": 30,
-					"height": 30,
-					"editable": false,
-					"name": "New marker"
-				}
-			}
+			TOOLS_PROPERTIES[TOOLS_TYPES.MARKER]
 		]
 	},
-	{
-		name: "TEXT",
+	[MENU_TYPES.TEXT]: {
+		name: MENU_TYPES.TEXT,
 		description: "",
 		type: "text",
 		icon: { prefix: "fas", name: "font" },
-		children: [
-			{
-				"name": "Text",
-				"description": "",
-				"type": "text",
-				"icon": {
-					"prefix": "fas",
-					"name": "font"
-				},
-				"option": {
-					"type": "textbox",
-					"text": "",
-					"width": 60,
-					"height": 30,
-					"fontSize": 32,
-					"name": "New text"
-				}
-			}
-		]
+		isInlineList: false,
+		isComponent: true,
+		children: Text
 	},
-	{
-		name: "IMAGE",
+	[MENU_TYPES.IMAGE]: {
+		name: MENU_TYPES.IMAGE,
 		description: "",
 		type: "image",
 		icon: { prefix: "fas", name: "image" },
+		isInlineList: true,
 		children: [
-			{
-				"name": "Image",
-				"description": "",
-				"type": "image",
-				"icon": {
-					"prefix": "fas",
-					"name": "image"
-				},
-				"option": {
-					"type": "image",
-					"name": "New image",
-					"src": "./images/sample/transparentBg.png"
-				}
-			},
-			{
-				"name": "GIF",
-				"description": "",
-				"type": "gif",
-				"icon": {
-					"prefix": "fas",
-					"name": "image"
-				},
-				"option": {
-					"type": "gif",
-					"width": 400,
-					"height": 400,
-					"name": "New gif",
-					"src": ""
-				}
-			}
+			TOOLS_PROPERTIES[TOOLS_TYPES.IMAGE],
+			TOOLS_PROPERTIES[TOOLS_TYPES.GIF]
 		]
 	},
-	{
-		name: "SHAPE",
+	[MENU_TYPES.SHAPE]: {
+		name: MENU_TYPES.SHAPE,
 		description: "",
 		type: "shape",
 		icon: { prefix: "fas", name: "draw-polygon" },
+		isInlineList: true,
 		children: [
-			{
-				"name": "Triangle",
-				"description": "",
-				"type": "shape",
-				"icon": {
-					"prefix": "fas",
-					"name": "play",
-					"style": {
-						"transform": "rotate(270deg)"
-					}
-				},
-				"option": {
-					"type": "triangle",
-					"width": 30,
-					"height": 30,
-					"name": "New shape"
-				}
-			},
-			{
-				"name": "Rectangle",
-				"description": "",
-				"type": "shape",
-				"icon": {
-					"prefix": "fas",
-					"name": "stop"
-				},
-				"option": {
-					"type": "rect",
-					"width": 40,
-					"height": 40,
-					"name": "New shape"
-				}
-			},
-			{
-				"name": "Circle",
-				"description": "",
-				"type": "shape",
-				"icon": {
-					"prefix": "fas",
-					"name": "circle"
-				},
-				"option": {
-					"type": "circle",
-					"radius": 30,
-					"name": "New shape"
-				}
-			},
-			{
-				"name": "Cube",
-				"description": "",
-				"type": "shape",
-				"icon": {
-					"prefix": "fas",
-					"name": "cube"
-				},
-				"option": {
-					"type": "cube",
-					"width": 80,
-					"height": 80,
-					"name": "New shape"
-				}
-			}
+			TOOLS_PROPERTIES[TOOLS_TYPES.TRIANGLE],
+			TOOLS_PROPERTIES[TOOLS_TYPES.RECTANGLE],
+			TOOLS_PROPERTIES[TOOLS_TYPES.CIRCLE],
+			TOOLS_PROPERTIES[TOOLS_TYPES.CUBE]
 		]
 	},
-	{
-		name: "DRAWING",
+	[MENU_TYPES.DRAWING]: {
+		name: MENU_TYPES.DRAWING,
 		description: "",
 		type: "drawing",
 		icon: { prefix: "fas", name: "draw-polygon" },
+		isInlineList: true,
 		children: [
-			{
-				"name": "Polygon",
-				"description": "",
-				"type": "drawing",
-				"icon": {
-					"prefix": "fas",
-					"name": "draw-polygon"
-				},
-				"option": {
-					"type": "polygon",
-					"name": "New polygon"
-				}
-			},
-			{
-				"name": "Line",
-				"description": "",
-				"type": "drawing",
-				"icon": {
-					"prefix": "fas",
-					"name": "minus"
-				},
-				"option": {
-					"type": "line",
-					"name": "New line"
-				}
-			},
-			{
-				"name": "Arrow",
-				"description": "",
-				"type": "drawing",
-				"icon": {
-					"prefix": "fas",
-					"name": "long-arrow-alt-right"
-				},
-				"option": {
-					"type": "arrow",
-					"name": "New arrow"
-				}
-			}
+			TOOLS_PROPERTIES[TOOLS_TYPES.POLYGON],
+			TOOLS_PROPERTIES[TOOLS_TYPES.LINE],
+			TOOLS_PROPERTIES[TOOLS_TYPES.ARROW]
 		]
 	},
-	{
-		name: "ELEMENT",
+	[MENU_TYPES.ELEMENT]: {
+		name: MENU_TYPES.ELEMENT,
 		description: "",
 		type: "element",
 		icon: { prefix: "fas", name: "chart-line" },
+		isInlineList: true,
 		children: [
-			{
-				"name": "Chart",
-				"description": "",
-				"type": "element",
-				"icon": {
-					"prefix": "fas",
-					"name": "chart-line"
-				},
-				"option": {
-					"superType": "element",
-					"type": "chart",
-					"name": "New chart",
-					"width": 356,
-					"height": 356
-				}
-			},
-			{
-				"name": "Element",
-				"description": "",
-				"type": "element",
-				"icon": {
-					"prefix": "fab",
-					"name": "html5"
-				},
-				"option": {
-					"superType": "element",
-					"type": "element",
-					"width": 480,
-					"height": 270,
-					"name": "New element"
-				}
-			},
-			{
-				"name": "Iframe",
-				"description": "",
-				"type": "element",
-				"icon": {
-					"prefix": "fas",
-					"name": "window-maximize"
-				},
-				"option": {
-					"superType": "element",
-					"type": "iframe",
-					"width": 480,
-					"height": 270,
-					"name": "New iframe"
-				}
-			},
-			{
-				"name": "Video",
-				"description": "",
-				"type": "element",
-				"icon": {
-					"prefix": "fab",
-					"name": "youtube"
-				},
-				"option": {
-					"superType": "element",
-					"type": "video",
-					"width": 480,
-					"height": 270,
-					"name": "New video",
-					"autoplay": true,
-					"muted": true,
-					"loop": true
-				}
-			}
+			TOOLS_PROPERTIES[TOOLS_TYPES.CHART],
+			TOOLS_PROPERTIES[TOOLS_TYPES.ELEMENT],
+			TOOLS_PROPERTIES[TOOLS_TYPES.IFRAME],
+			TOOLS_PROPERTIES[TOOLS_TYPES.VIDEO]
 		]
 	},
-	{
-		name: 'SVG',
+	[MENU_TYPES.RESIZE]: {
+		name: MENU_TYPES.RESIZE,
+		description: "",
+		type: "resize",
+		icon: { prefix: "fas", name: "expand" },
+		isInlineList: false,
+		isComponent: true,
+		children: Resize
+	},
+	[MENU_TYPES.SVG]: {
+		name: MENU_TYPES.SVG,
 		description: '',
 		type: 'svg',
 		icon: { prefix: 'fas', name: 'bezier-curve' },
+		isInlineList: true,
 		children: [
-			{
-				"name": "Default",
-				"description": "",
-				"type": "default",
-				"icon": {
-					"prefix": "fas",
-					"name": "bezier-curve"
-				},
-				"option": {
-					"type": "svg",
-					"superType": "svg",
-					"name": "New SVG",
-					"loadType": "svg"
-				}
-			}
+			TOOLS_PROPERTIES[TOOLS_TYPES.DEFAULT]
 		]
 	}
-];
-
-export { MENU };
-
-export default MENU;
+}

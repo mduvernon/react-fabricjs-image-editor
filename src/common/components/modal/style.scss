@@ -1,0 +1,19 @@
+.rde-editor__modal-content {
+    box-shadow: 24px;
+
+    .rde-editor__modal-header {
+        display: flex;
+        flex-direction: row;
+
+        svg {
+            position: relative;
+            top: 20px;
+        }
+    }
+
+    .rde-editor__modal-footer {
+        .actions {
+            margin-left: auto;
+        }
+    }
+}

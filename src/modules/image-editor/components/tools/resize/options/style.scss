@@ -1,0 +1,22 @@
+.rde-editor__tools-resize-options-wrapper {
+    padding-top: 20px;
+    width: 100%;
+
+    .rde-editor__tools-resize-options-header {
+        .title {
+            text-transform: uppercase;
+            margin-top: 0;
+        }
+    }
+
+    .rde-editor__tools-resize-options-list {
+        .rde-editor__tools-resize-options-item {
+            margin-bottom: 5px;
+            text-transform: none;
+
+            .rde-editor__tools-resize-options-item-value {
+                margin-left: auto;
+            }
+        }
+    }
+}

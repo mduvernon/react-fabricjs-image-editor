@@ -1,0 +1,67 @@
+.rde-editor__carousel-container {
+    z-index: 10;
+    box-sizing: inherit;
+    display: block;
+    unicode-bidi: isolate;
+    color-scheme: dark;
+    touch-action: pan-y pinch-zoom;
+    height: 100%;
+
+    .rde-editor__carousel-prev-button {
+        left: 0;
+        justify-content: flex-start;
+        background: linear-gradient(
+            90deg,
+            #ffffff 1.56%,
+            rgba(255, 255, 255, 0.89) 52.4%,
+            rgba(255, 255, 255, 0.532165) 76.04%,
+            rgba(255, 255, 255, 0) 100%
+        );
+    }
+
+    .rde-editor__carousel-next-button {
+        right: 0;
+        justify-content: flex-end;
+        background: linear-gradient(
+            270deg,
+            #ffffff 1.56%,
+            rgba(255, 255, 255, 0.89) 52.4%,
+            rgba(255, 255, 255, 0.532165) 76.04%,
+            rgba(255, 255, 255, 0) 100%
+        );
+    }
+
+    .rde-editor__carousel-items {
+        padding: 0;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .rde-editor__carousel-item {
+        padding: 0px;
+        display: inline-block;
+        list-style-type: none;
+        user-select: none;
+    }
+
+    /* width */
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}

@@ -1,35 +1,23 @@
+// React
 import React from 'react';
-import ReactDom from 'react-dom';
-import { ConfigProvider } from 'antd';
-import enUS from 'antd/locale/en_US';
+import ReactDOM from 'react-dom/client';
+// Components
 import App from './App';
-import { register } from './serviceWorker';
-import i18next from 'i18next';
-import { i18nClient } from './i18n';
+import reportWebVitals from './reportWebVitals';
+// Styles
+import './index.scss';
 
-const antResources = {
-	en: enUS,
-	'en-US': enUS,
-};
+const root = ReactDOM.createRoot(
+	document.getElementById('root') as HTMLElement
+);
 
-const root = document.createElement('div');
-root.id = 'root';
+root.render(
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>
+);
 
-document.body.appendChild(root);
-
-const render = Component => {
-	const rootElement = document.getElementById('root');
-
-	ReactDom.render(
-		<ConfigProvider locale={antResources[i18next.language]}>
-			<Component />
-		</ConfigProvider>,
-		rootElement,
-	);
-};
-
-i18nClient();
-
-render(App);
-
-register();
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

@@ -4,23 +4,27 @@ import { FC, RefAttributes, forwardRef, memo, useEffect, useMemo, useState } fro
 import {
     notification,
     message,
-    Input,
     Tabs,
 } from 'antd';
-// i18next
-import i18n from 'i18next';
 // Libs
 import { v4 as uuid } from 'uuid';
 // Common Hooks
-import { useDeepCompareEffect } from "common/hooks";
+import { useDeepCompareEffect, useStore } from "common/hooks";
 // Common Components
 import {
-    CommonButton,
     Scrollbar,
     SVGModal,
     Flex,
     Icon,
 } from 'common/components';
+// Constants
+import {
+    MENU_TYPES
+} from "common/constants";
+// Utils
+import {
+    randomId
+} from "common/utils";
 // Styles
 import './style.scss';
 
@@ -40,13 +44,17 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
     ...props
 }, editorLeftPanelRef$) => {
 
-    const [activeKey, setActiveKey] = useState('');
+    const [activeKey, setActiveKey] = useState(MENU_TYPES.PROJECTS);
     const [collapse, setCollapse] = useState(false);
     const [textSearch, setTextSearch] = useState('');
     const [filteredDescriptors, setFilteredDescriptors] = useState([]);
     const [svgModalVisible, setSvgModalVisible] = useState(false);
     const [svgOption, setSvgOption] = useState(null);
     const [item, setItem] = useState(null);
+
+    const {
+
+    } = useStore();
 
     const handlers = useMemo(() => ({
         onAddItem: (item, centered) => {
@@ -56,12 +64,16 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
                 return;
             }
 
-            const id = uuid();
+            const id = randomId(item.option?.type);
             const option = Object.assign({}, item.option, { id });
 
-            if (item.option.superType === 'svg' && item.type === 'default') {
+            if (item.option?.superType === 'svg' && item.type === 'default') {
                 handlers?.onSVGModalVisible();
 
+                return;
+            }
+
+            if (!item.option) {
                 return;
             }
 
@@ -73,7 +85,7 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
                 ...option,
                 type: 'svg',
                 superType: 'svg',
-                id: uuid(),
+                id: randomId('svg'),
                 name: 'New SVG'
             }, centered);
 
@@ -87,6 +99,10 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
                 return;
             }
 
+            if (!item.option) {
+                return;
+            }
+
             if (item.option.type === 'line') {
                 canvasRef.current?.handler.drawingHandler.line.init();
 
@@ -96,6 +112,17 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
             } else {
                 canvasRef.current?.handler.drawingHandler.polygon.init();
             }
+        },
+
+        onResize: (option: { width: number, height: number }) => {
+            const workareaOption = {
+                ...option,
+                workareaHeight: option.height,
+                workareaWidth: option.width,
+            }
+
+            canvasRef.current.handler.setWorkareaOption(workareaOption);
+            canvasRef.current?.rerender();
         },
 
         onChangeTab: (activeKey) => {
@@ -193,6 +220,7 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
                                 top: layerY,
                             },
                         };
+
                         handlers?.onAddItem(item, false);
                     } else {
                         notification.warning({
@@ -200,6 +228,7 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
                         });
                     }
                 });
+
                 return false;
             }
 
@@ -221,29 +250,42 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
         },
     }), [item]);
 
-    const _attachEventListener = (canvas) => {
-        canvas.canvas?.wrapperEl?.addEventListener('dragenter', events?.onDragEnter, false);
-        canvas.canvas?.wrapperEl?.addEventListener('dragover', events?.onDragOver, false);
-        canvas.canvas?.wrapperEl?.addEventListener('dragleave', events?.onDragLeave, false);
-        canvas.canvas?.wrapperEl?.addEventListener('drop', events?.onDrop, false);
+    const _attachEventListener = (canvasRef) => {
+        canvasRef.current?.canvas?.wrapperEl?.addEventListener('dragenter', events?.onDragEnter, false);
+        canvasRef.current?.canvas?.wrapperEl?.addEventListener('dragover', events?.onDragOver, false);
+        canvasRef.current?.canvas?.wrapperEl?.addEventListener('dragleave', events?.onDragLeave, false);
+        canvasRef.current?.canvas?.wrapperEl?.addEventListener('drop', events?.onDrop, false);
     };
 
-    const _detachEventListener = (canvas) => {
-        canvas.canvas?.wrapperEl?.removeEventListener('dragenter', events?.onDragEnter);
-        canvas.canvas?.wrapperEl?.removeEventListener('dragover', events?.onDragOver);
-        canvas.canvas?.wrapperEl?.removeEventListener('dragleave', events?.onDragLeave);
-        canvas.canvas?.wrapperEl?.removeEventListener('drop', events?.onDrop);
+    const _detachEventListener = (canvasRef) => {
+        canvasRef.current?.canvas?.wrapperEl?.removeEventListener('dragenter', events?.onDragEnter);
+        canvasRef.current?.canvas?.wrapperEl?.removeEventListener('dragover', events?.onDragOver);
+        canvasRef.current?.canvas?.wrapperEl?.removeEventListener('dragleave', events?.onDragLeave);
+        canvasRef.current?.canvas?.wrapperEl?.removeEventListener('drop', events?.onDrop);
     };
 
-    const _renderItems = (items: any[]) => (
+    const _renderMenuPanel = (key: string) => {
+        if (descriptors[key].isComponent) {
+            const Component = descriptors[key].children;
+
+            return (
+                <Component
+                    onAddItem={handlers?.onAddItem}
+                    onResize={handlers?.onResize}
+                />
+            );
+        }
+    };
+
+    const _renderInlineListItems = (items: any[]) => (
         <Flex flexWrap="wrap" flexDirection="column" style={{ width: '100%' }}>
-            {items.map((item) => _renderItem(item))}
+            {items.map((item) => _renderInlineItem(item))}
         </Flex>
     );
 
-    const _renderItem = (item, centered?: boolean) => {
+    const _renderInlineItem = (item, centered?: boolean) => {
         if (Array.isArray(item)) {
-            return item.map((i) => _renderItem(i, centered));
+            return item.map((i) => _renderInlineItem(i, centered));
         }
 
         return (
@@ -292,13 +334,15 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
     useEffect(() => {
 
         return () => {
-            _detachEventListener(canvasRef.current);
+            if (canvasRef.current) {
+                _detachEventListener(canvasRef);
+            }
         }
     }, []);
 
     useDeepCompareEffect(() => {
         if (canvasRef.current) {
-            _attachEventListener(canvasRef.current);
+            _attachEventListener(canvasRef);
         }
 
     }, [canvasRef.current, item]);
@@ -306,58 +350,32 @@ const EditorLeftPanelComponent: FC<OwnProps> = forwardRef(({
     return (
         <div className={`rde-editor-items rde-editor-left-panel ${Boolean(collapse) ? 'minimize' : ''}`}>
             <Flex flex="1" flexDirection="column" style={{ height: '100%' }}>
-                <Flex justifyContent="center" alignItems="center" style={{ height: 40 }}>
-                    <CommonButton
-                        icon={collapse ? 'angle-double-right' : 'angle-double-left'}
-                        shape="circle"
-                        className="rde-action-btn"
-                        style={{ margin: '0 4px' }}
-                        onClick={handlers?.onCollapse}
-                    />
-                    {collapse ? (null) : (
-                        <Input
-                            style={{ margin: '8px' }}
-                            placeholder={i18n.t('action.search-list')}
-                            onChange={handlers?.onSearchNode}
-                            value={textSearch}
-                            allowClear
-                        />
-                    )}
-                </Flex>
                 <Scrollbar>
                     <Flex className="rde-editor-left-panel" flex="1" style={{}}>
-                        {((textSearch?.length > 0) && _renderItems(filteredDescriptors)) ||
-                            ((collapse) ? (
-                                <Flex
-                                    flexWrap="wrap"
-                                    flexDirection="column"
-                                    style={{ width: '100%' }}
-                                    justifyContent="center"
-                                >
-                                    {handlers?.transformList().map((item) => _renderItem(item))}
-                                </Flex>
-                            ) : (
-                                <Tabs
-                                    className="rde-editor-left-panel-menu-tabs"
-                                    tabPosition="left"
-                                    activeKey={activeKey}
-                                    onChange={handlers?.onChangeTab}
-                                    tabBarStyle={{ marginTop: 20 }}
-                                    items={
-                                        descriptors?.map((menu) => ({
-                                            className: 'rde-editor-left-panel-menu-tab',
-                                            key: menu.name,
-                                            label: (
-                                                <div>
-                                                    <Icon prefix={menu.icon.prefix} name={menu.icon?.name} />
-                                                    <h5>{menu.name}</h5>
-                                                </div>
-                                            ),
-                                            children: _renderItems(menu?.children ?? [])
-                                        }))
-                                    }
-                                />
-                            ))}
+                        <Tabs
+                            className="rde-editor-left-panel-menu-tabs"
+                            tabPosition="left"
+                            activeKey={activeKey}
+                            onChange={handlers?.onChangeTab}
+                            tabBarStyle={{ marginTop: 20 }}
+                            items={
+                                Object.keys(descriptors).map((key) => ({
+                                    className: 'rde-editor-left-panel-menu-tab',
+                                    key: key,
+                                    label: (
+                                        <div className="rde-editor-left-panel-menu-tab-name">
+                                            <Icon prefix={descriptors[key].icon?.prefix} name={descriptors[key].icon?.name} />
+                                            <h5>{descriptors[key].name}</h5>
+                                        </div>
+                                    ),
+                                    children: (descriptors[key].isInlineList) ? (
+                                        <>{_renderInlineListItems(descriptors[key]?.children ?? [])}</>
+                                    ) : (
+                                        <>{_renderMenuPanel(key)}</>
+                                    )
+                                }))
+                            }
+                        />
                     </Flex>
                 </Scrollbar>
             </Flex>
